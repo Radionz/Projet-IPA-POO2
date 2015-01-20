@@ -21,9 +21,8 @@ public class Tablet extends Item{
 		{
 			if(Math.random() > 0.75)
 				return "You've played at World of Zuul";
-			
-			Game.getPlayer().forgetALesson();
-			
+			// If the game is not world of zuul, the player forget a lesson
+			Game.getPlayer().forgetALesson();		
 			return "You've played a game and you've forgotten a lesson";
 		}
 		else
