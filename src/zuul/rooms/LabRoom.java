@@ -15,7 +15,7 @@ public class LabRoom extends Room {
 
 	public LabRoom(String description) {
 		super(description);
-		this.lab = new Lab(Game.getPlayer().getCurrentPOOLevel());
+		this.lab = new Lab(0);
 		this.actions = new ArrayList<String>();
 		labInProcess = false;
 		actions.add("lab");
@@ -128,11 +128,10 @@ public class LabRoom extends Room {
      * @author Adrien Boucher
      */
     @Override
-    public void enter(){
+    public void enter(Player player){
+    	super.enter(player);
     	if(getLab().getSuccess()){
 			setLab(new Lab(Game.getPlayer().getCurrentPOOLevel()+1));//lessons[player.getCurrentPOOLevel() + 1]);
 		}
-    	
-    	System.out.println(getLongDescription());
     }
 }

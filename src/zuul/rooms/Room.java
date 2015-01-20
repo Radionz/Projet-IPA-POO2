@@ -1,6 +1,7 @@
 package zuul.rooms;
 
 import zuul.Game;
+import zuul.entities.Player;
 import zuul.entities.items.Item;
 import zuul.studies.Course;
 
@@ -31,6 +32,7 @@ public class Room {
 	protected ArrayList<Item> items;
 	private ArrayList<Item> usableItems;
 	protected ArrayList<String> actions;
+	protected ArrayList<Player> playersInRoom;
 
 	/**
 	 * Create a rooms described "description". Initially, it has no exits.
@@ -45,6 +47,7 @@ public class Room {
 		this.items = new ArrayList<>(100);
 		this.usableItems = new ArrayList<>(100);
 		this.actions = new ArrayList<>(100);
+		this.playersInRoom = new ArrayList<Player>();
 	}
 
 	/**
@@ -125,7 +128,7 @@ public class Room {
 		String returnString = "Exits: ";
 		Set<Exits> keys = exits.keySet();
 		for (Exits exit : keys) {
-			if(!getExit(exit.getValue()).isHidden())
+			if (!getExit(exit.getValue()).isHidden())
 				returnString += exit.getValue() + " - ";
 		}
 		return returnString.substring(0, returnString.length() - 3);
@@ -250,7 +253,8 @@ public class Room {
 	/**
 	 * @author Adrien Boucher Define what happen when the player enter the room
 	 */
-	public void enter() {
+	public void enter(Player player) {
+		playersInRoom.add(player);
 		System.out.println(getLongDescription());
 	}
 
@@ -266,13 +270,21 @@ public class Room {
 	 * @author Adrien Boucher Check if the player can leave the room
 	 * @return true if player can leave, else it return false
 	 */
-	public boolean canLeave() {
-		return true;
+	public boolean leave(Player player) {
+		System.out.println("LEAVE");
+		// Player not in the room
+		for (Player p : playersInRoom) {
+			if (p.equals(player)) {
+				playersInRoom.remove(player);
+				return true;
+			}
+		}
+		return false;
+
 	}
 
 	/**
-	 * @author Adrien Boucher 
-	 * 		   Tells if the room is visible (eg: exits are shown
+	 * @author Adrien Boucher Tells if the room is visible (eg: exits are shown
 	 *         in the other rooms)
 	 * @return whether the room is hidden or not
 	 */

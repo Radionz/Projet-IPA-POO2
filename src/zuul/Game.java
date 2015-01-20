@@ -1,5 +1,6 @@
 package zuul;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import zuul.entities.Player;
@@ -34,8 +35,8 @@ public class Game {
 
 	private static Player player;
 	private Parser parser;
-	private Room currentRoom;
 	private static HashMap<String,String> constantes;
+	private ArrayList<Room> rooms;
 
 	private static Question[] questions;
 	private static Course[] lessons;
@@ -50,10 +51,12 @@ public class Game {
 			constantes = IO.getFromFile(IO.PossibleFiles.ENGLISH.getPath());
 		} catch(Exception e) {e.printStackTrace();}
 		questions = new Question[15];
-		lessons = new Course[10];
-		player = new Player("", new Item(""));
+		lessons = new Course[10];		
 		init();
+		rooms = new ArrayList<Room>();
 		createRooms();
+		// Set the player in the first room
+		player = new Player("", new Item(""), null);
 		parser = new Parser();
 	}
 
@@ -73,14 +76,16 @@ public class Game {
 	public static Course[] getLessons() {
 		return lessons;
 	}
-	/* Basics getters */
+	
+	public ArrayList<Room> getRooms(){ return rooms; }
+
 
 
 	/**
 	 * Create all the rooms and link their exits together.
 	 */
 	private void createRooms() {
-		Room outside, theater, pub, lab, office, secretPassage;
+		Room outside, theater, pub, office, secretPassage;
 
 		// create the rooms
 		outside = new Room(constantes.get("outside_description"));
@@ -119,7 +124,18 @@ public class Game {
 		corridor2.setExit(Room.Exits.WEST, examroom);
 		corridor2.setExit(Room.Exits.SOUTH, outside);
 
-		currentRoom = outside; // start game outside
+		rooms.add(outside);
+		rooms.add(theater);
+		rooms.add(pub);
+		rooms.add(office);
+		rooms.add(secretPassage);
+		rooms.add(labroom);		
+		rooms.add(classroom);
+		rooms.add(examroom);
+		rooms.add(library);
+		rooms.add(lunchroom);
+		rooms.add(corridor);
+		rooms.add(corridor2);
 	}
 
 
@@ -145,8 +161,6 @@ public class Game {
 	 */
 	public void play() {
 		String playerName = getPlayerName();
-		player = new Player(playerName);
-
 		printWelcome();
 
 		// Enter the main command loop. Here we repeatedly read commands and
@@ -179,7 +193,8 @@ public class Game {
 		System.out.println(this.player.getName() + ", " + constantes.get("intro"));
 		System.out.println(constantes.get("need_help") + " : " + CommandWord.HELP);
 		System.out.println();
-		System.out.println(currentRoom.getLongDescription());
+		// Add the player to the first room -> print room description
+		player.enter(rooms.get(0));
 	}
 
 	/**
@@ -259,24 +274,23 @@ public class Game {
 	 * otherwise print an error message.
 	 */
 	private void goRoom(Command command) {
+		System.out.println("GO");
 		if (!command.hasSecondWord()) {
 			// if there is no second word, we don't know where to go...
 			System.out.println(constantes.get("go_where"));
-			System.out.println(currentRoom.getExitString());
+			System.out.println(player.getCurrentRoom().getExitString());
 			return;
 		}
-
 		String direction = command.getSecondWord();
 
 		// Try to leave current rooms.
-		Room nextRoom = currentRoom.getExit(direction);		
+		Room nextRoom = player.getCurrentRoom().getExit(direction);		
 
 		if (nextRoom == null) {
 			System.out.println(constantes.get("no_door"));
-		}else if(currentRoom.isHidden() || (currentRoom.canLeave() && nextRoom.canEnter())){
-			currentRoom = nextRoom;
-			currentRoom.enter();
-		}		
+		}else if(player.getCurrentRoom().isHidden() || (nextRoom.canEnter() && player.leaveRoom())){
+			player.enter(nextRoom);
+		}
 	}
 
 	/**
@@ -291,9 +305,9 @@ public class Game {
 		}
 
 		String itemName = command.getSecondWord();
-
+		
 		// Try to drop item in the current rooms.
-		if(player.dropItem(currentRoom,itemName)){
+		if(player.dropItem(player.getCurrentRoom(),itemName)){
 			System.out.println(constantes.get("ok_drop") + ": " + itemName);
 		}else{
 			System.out.println(constantes.get("you_not_carry")+ ": " + itemName);
@@ -309,19 +323,19 @@ public class Game {
 		if (!command.hasSecondWord()) {
 			// if there is no second word, we don't know where to go...
 			System.out.println(constantes.get("what_pick"));
-			System.out.println(currentRoom.getItemString());
+			System.out.println(player.getCurrentRoom().getItemString());
 			return;
 		}
 
 		String itemName = command.getSecondWord();
 
 		// Try to pick item in the current rooms.
-		if(currentRoom.hasItem(itemName)){
-			player.pickUp(currentRoom,itemName);
+		if(player.getCurrentRoom().hasItem(itemName)){
+			player.pickUp(player.getCurrentRoom(),itemName);
 			System.out.println(constantes.get("ok_pick") + ": " + itemName);
 		}else{
 			System.out.println(constantes.get("no") + itemName);
-			System.out.println(currentRoom.getItemString());
+			System.out.println(player.getCurrentRoom().getItemString());
 		}
 	}
 
@@ -339,7 +353,7 @@ public class Game {
 		String itemName = command.getSecondWord();
 
 		// Try to use item in the current rooms.
-		if (currentRoom.canUseItem(itemName)) {
+		if (player.getCurrentRoom().canUseItem(itemName)) {
 			System.out.println(player.use(itemName));
 		}
 		else {
@@ -355,14 +369,14 @@ public class Game {
 		if (!command.hasSecondWord()) {
 			// if there is no second word, we don't know where to go...
 			System.out.println(constantes.get("what_do"));
-			System.out.println(currentRoom.getActionString());
+			System.out.println(player.getCurrentRoom().getActionString());
 			return;
 		}
 
 		String mehtod = command.getSecondWord();
 
 		// Try to use item in the current rooms.
-		System.out.println(currentRoom.doSomething(mehtod));
+		System.out.println(player.getCurrentRoom().doSomething(mehtod));
 	}
 
 	/**
@@ -378,7 +392,7 @@ public class Game {
 		}
 
 		String answer = command.getSecondWord();
-		currentRoom.study(answer);		
+		player.getCurrentRoom().study(answer);		
 	}
 
 	/**

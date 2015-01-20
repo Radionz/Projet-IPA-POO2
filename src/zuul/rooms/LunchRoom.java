@@ -43,8 +43,8 @@ public class LunchRoom extends Room{
      * Define what happen when the player enter the room
      */
     @Override
-    public void enter(){
-    	System.out.println(getLongDescription());
+    public void enter(Player player){
+    	super.enter(player);
     	if(isForced())
     		System.out.println(playBabyfoot());
     }

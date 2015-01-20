@@ -21,6 +21,7 @@ public class Player {
 	private final String name;
 	private ArrayList<Item> inventory;
 	private Badge badge;
+	private Room currentRoom;
 
 	/**
 	 * constructor with a name an carrying an item
@@ -30,11 +31,12 @@ public class Player {
 	 * @param item
 	 *            an item
 	 */
-	public Player(String playerName, Item item) {
+	public Player(String playerName, Item item, Room room) {
 		this.name = playerName;
 		this.badge = new Badge();
 		this.inventory = new ArrayList<>(100);
 		this.inventory.add(item);
+		this.currentRoom = room;
 	}
 
 	/**
@@ -43,10 +45,12 @@ public class Player {
 	 * @param playerName
 	 *            String of the player's name
 	 */
+	@Deprecated
 	public Player(String playerName) {
 		this.name = playerName;
 		this.badge = new Badge();
 		this.inventory = new ArrayList<>(100);
+		this.currentRoom = null;
 	}
 
 	/* Basic getters / setters */
@@ -77,6 +81,19 @@ public class Player {
 	public ArrayList<Lab> getAbilities() {
 		return badge.getAbilities();
 	}
+	
+	public void enter(Room room){ 
+		currentRoom = room; 
+		System.out.println("PE");
+		room.enter(this);
+	}
+	
+	public boolean leaveRoom()
+	{
+		return currentRoom.leave(this);			
+	}
+	
+	public Room getCurrentRoom(){ return currentRoom; }
 
 	/* Basic getters / setters */
 
@@ -199,6 +216,16 @@ public class Player {
 
 	public void gainAmountEnergy(int energy) {
 		badge.addEnergy(energy);
+		
+	}
+	
+	@Override
+	public boolean equals(Object obj)
+	{
+		if(this == obj) return true;
+		if(!(obj instanceof Player))
+			return false;
+		return ((Player)obj).getName().equals(name);
 		
 	}
 }
