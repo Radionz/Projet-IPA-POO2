@@ -20,10 +20,10 @@ public class Tablet extends Item{
 		if(Math.random() < 0.5)
 		{
 			if(Math.random() > 0.75)
-				return "You've played at World of Zuul";
+				return Game.getConst().get("play_game_zuul");
 			// If the game is not world of zuul, the player forget a lesson
 			Game.getPlayer().forgetALesson();		
-			return "You've played a game and you've forgotten a lesson";
+			return Game.getConst().get("play_game");
 		}
 		else
 		{

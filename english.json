@@ -34,5 +34,9 @@
 "no_exam":"There is currently no exam or your answer in not correct (true or false)",
 "lab_over":"This lab session is over !",
 "not_in_examroom":"You are not in the examroom",
-"what_quit":"Quit what?"
+"what_quit":"Quit what?",
+"chocolate_bar_description":"Chocolate bar",
+"play_game_zuul":"You've played at World of Zuul",
+"play_game":"You've played a game and you've forgotten a lesson"
+
 }

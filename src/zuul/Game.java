@@ -102,6 +102,8 @@ public class Game {
 		outside.addItem(new Item(constantes.get("chocolate_bar_description"),1));
 		outside.addUsableItem(new Item(constantes.get("chocolate_bar_description"),1));
 		outside.addItem(new Coffee());
+		
+		
 
 
 		lunchroom.setExit(Room.Exits.WEST, pub);
@@ -314,7 +316,7 @@ public class Game {
 		// Try to pick item in the current rooms.
 		if(currentRoom.hasItem(itemName)){
 			player.pickUp(currentRoom,itemName);
-			System.out.println(constantes.get("ok_pick") + itemName);
+			System.out.println(constantes.get("ok_pick") + ": " + itemName);
 		}else{
 			System.out.println(constantes.get("no") + itemName);
 			System.out.println(currentRoom.getItemString());
