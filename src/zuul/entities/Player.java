@@ -52,6 +52,13 @@ public class Player {
 		this.inventory = new ArrayList<>(100);
 		this.currentRoom = null;
 	}
+	
+	public Player(String playerName, Room room) {
+		this.name = playerName;
+		this.badge = new Badge();
+		this.inventory = new ArrayList<>(100);
+		this.currentRoom = room;
+	}
 
 	/* Basic getters / setters */
 	public String getName() {
@@ -84,7 +91,6 @@ public class Player {
 	
 	public void enter(Room room){ 
 		currentRoom = room; 
-		System.out.println("PE");
 		room.enter(this);
 	}
 	

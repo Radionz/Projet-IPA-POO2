@@ -271,7 +271,6 @@ public class Room {
 	 * @return true if player can leave, else it return false
 	 */
 	public boolean leave(Player player) {
-		System.out.println("LEAVE");
 		// Player not in the room
 		for (Player p : playersInRoom) {
 			if (p.equals(player)) {
