@@ -1,6 +1,7 @@
 package zuul.rooms;
 
 import zuul.Game;
+import zuul.entities.NPC;
 import zuul.entities.Player;
 import zuul.entities.items.Item;
 import zuul.studies.Course;
@@ -8,6 +9,7 @@ import zuul.studies.Course;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Set;
 import java.util.HashMap;
 
@@ -255,14 +257,17 @@ public class Room {
 	 */
 	public void enter(Player player) {
 		playersInRoom.add(player);
-		System.out.println(getLongDescription());
+		if(player instanceof NPC)		
+			System.out.println("\n" + player.getName() + " is " + description + "\n");
+		else
+			System.out.println(getLongDescription());
 	}
 
 	/**
 	 * @author Adrien Boucher Check if the player can enter in the room
 	 * @return true if player can enter, else it return false
 	 */
-	public boolean canEnter() {
+	public boolean canEnter(Player player) {
 		return true;
 	}
 
@@ -318,6 +323,11 @@ public class Room {
 				}
 			}
 			return null;
+		}
+		
+		public static Exits getRandom()
+		{
+			return values()[new Random().nextInt(values().length)];
 		}
 
 	}

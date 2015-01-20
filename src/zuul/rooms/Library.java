@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import zuul.Game;
+import zuul.entities.Player;
 
 /**
  * @author Nicolas Sarroche, Dorian Blanc
@@ -32,10 +33,10 @@ public class Library extends Room{
      * @author Adrien Boucher
      */
     @Override
-    public boolean canEnter(){
+    public boolean canEnter(Player player){
     	if(!checkForschedule())
     	{
-    		System.out.println(Game.getConst().get("no_access_library"));
+    		System.out.println(player.getName() + ", " + Game.getConst().get("no_access_library"));
     		return false;
     	}
     	return true;    	

@@ -3,6 +3,7 @@ package zuul;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import zuul.entities.IA;
 import zuul.entities.IAManager;
 import zuul.entities.Player;
 import zuul.entities.items.Coffee;
@@ -61,7 +62,7 @@ public class Game {
 		player = new Player("", new Item(""), null);
 		parser = new Parser();
 		
-		manager = new IAManager(this);
+		manager = new IAManager(rooms);
 	}
 
 	/* Basic getters */
@@ -165,7 +166,10 @@ public class Game {
 	 */
 	public void play() {
 		
-		manager.actionTest();
+		manager.initIA(rooms.get(0));
+		System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+		System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+		System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
 		
 		String playerName = getPlayerName();
 		printWelcome();
@@ -174,11 +178,19 @@ public class Game {
 		// execute them until the game is over.
 
 		boolean finished = false;
-		while (!finished) {
+		while (!finished) {			
 			Command command = parser.getCommand();
-			finished = processCommand(command, player);
+			finished = processCommand(command, player);	
+			runIA();
 		}
 		System.out.println(constantes.get("close_game"));
+	}
+	
+	public void runIA()
+	{
+		IA ia = manager.getNextIA();
+		processCommand(manager.getCommandForIA(ia), ia);
+		try {	Thread.sleep(1000);	} catch (InterruptedException e) {	e.printStackTrace();	}
 	}
 
 	/**
@@ -196,7 +208,6 @@ public class Game {
 	 * Print out the opening message for the player.
 	 */
 	private void printWelcome() {
-		System.out.println();
 		System.out.println(this.player.getName() + ", " + constantes.get("intro"));
 		System.out.println(constantes.get("need_help") + " : " + CommandWord.HELP);
 		System.out.println();
@@ -293,8 +304,8 @@ public class Game {
 		Room nextRoom = p.getCurrentRoom().getExit(direction);		
 
 		if (nextRoom == null) {
-			System.out.println(constantes.get("no_door"));
-		}else if(p.getCurrentRoom().isHidden() || (nextRoom.canEnter() && p.leaveRoom())){
+			System.out.println(p.getName() + ", " + constantes.get("no_door"));
+		}else if(p.getCurrentRoom().isHidden() || (nextRoom.canEnter(p) && p.leaveRoom())){
 			p.enter(nextRoom);
 		}
 	}
