@@ -134,6 +134,7 @@ public class Badge implements Serializable {
 	 */
 	public String toString() {
 		return "";
+		//test de github
 	}
 
 	public void setCurrentPOOLevel(int currentPOOLevel) {
