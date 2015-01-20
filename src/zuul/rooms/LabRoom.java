@@ -2,6 +2,7 @@ package zuul.rooms;
 
 import java.util.ArrayList;
 import zuul.Game;
+import zuul.entities.Player;
 import zuul.studies.Lab;
 
 /**
@@ -26,10 +27,9 @@ public class LabRoom extends Room {
 	 * @return the question asked
 	 */
 	public String lab() {
-		if (Game.getPlayer().getKnowledges().size() > 0
-				&& Game.getPlayer().getKnowledges()
-						.get(Game.getPlayer().getCurrentPOOLevel()) != null) {
-
+		Player player = Game.getPlayer();
+		int pooLevel = player.getCurrentPOOLevel();
+		if (player.getKnowledges().size() >= pooLevel) {
 			actions.remove("lab");
 			this.labInProcess = true;
 			return lab.askQuestion();
@@ -135,17 +135,4 @@ public class LabRoom extends Room {
     	
     	System.out.println(getLongDescription());
     }
-    
-    /**
-     * @author Adrien Boucher
-     * Check if the player can leave the room
-     * @return true if player can leave, else it return false
-     */
-    @Override
-    public boolean canLeave()
-    {
-    	
-    	return true;
-    }
-
 }

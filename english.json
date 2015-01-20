@@ -9,6 +9,7 @@
 "theater_description":"in the theater",
 "pub_description":"in the campus pub",
 "office_description":"in the computing admin office",
+"secret_passage_description":"in a secret passage",
 "welcome":"Welcome to the World of Zuul!",
 "invite_enter_name":"First, tell me, what's your sweet name ?",
 "close_game":"Thank you for playing.  Good bye.",
@@ -23,10 +24,10 @@
 "no_access_library":"You can't access to Library now ! It's close ..",
 "what_drop":"What to drop ?",
 "ok_drop":"successfully dropped",
-"you_not_carry":"You don't carry",
+"you_not_carry":"You don't carry :",
 "what_pick":"What to pick up ?",
 "ok_pick":"successfully picked",
-"no":"There is no",
+"no":"There is no ",
 "what_use":"What to use ?",
 "no_use_item_here":"Impossible to use this item here.",
 "what_do":"What to do ?",
@@ -38,5 +39,4 @@
 "chocolate_bar_description":"Chocolate bar",
 "play_game_zuul":"You've played at World of Zuul",
 "play_game":"You've played a game and you've forgotten a lesson"
-
 }

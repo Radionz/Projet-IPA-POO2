@@ -80,7 +80,7 @@ public class Game {
 	 * Create all the rooms and link their exits together.
 	 */
 	private void createRooms() {
-		Room outside, theater, pub, lab, office;
+		Room outside, theater, pub, lab, office, secretPassage;
 
 		// create the rooms
 		outside = new Room(constantes.get("outside_description"));
@@ -94,6 +94,7 @@ public class Game {
 		theater = new Room(constantes.get("theater_description"));
 		pub = new Room(constantes.get("pub_description"));
 		office = new Room(constantes.get("office_description"));
+		secretPassage = new SecretPassage(constantes.get("secret_passage_description"));
 
 		// initialise rooms exits
 		outside.setExit(Room.Exits.EAST, library);
@@ -103,7 +104,8 @@ public class Game {
 		outside.addUsableItem(new Item(constantes.get("chocolate_bar_description"),1));
 		outside.addItem(new Coffee());
 		
-		
+		pub.setExit(Room.Exits.WEST, secretPassage);
+		secretPassage.setExit(Room.Exits.WEST, theater);
 
 
 		lunchroom.setExit(Room.Exits.WEST, pub);
@@ -271,7 +273,7 @@ public class Game {
 
 		if (nextRoom == null) {
 			System.out.println(constantes.get("no_door"));
-		}else if(currentRoom.canLeave() && nextRoom.canEnter()){
+		}else if(currentRoom.isHidden() || (currentRoom.canLeave() && nextRoom.canEnter())){
 			currentRoom = nextRoom;
 			currentRoom.enter();
 		}		
@@ -292,10 +294,10 @@ public class Game {
 
 		// Try to drop item in the current rooms.
 		if(player.dropItem(currentRoom,itemName)){
-			System.out.println(constantes.get("ok_drop") + itemName);
+			System.out.println(constantes.get("ok_drop") + ": " + itemName);
 		}else{
-			System.out.println(constantes.get("you_not_carry") + itemName);
-			System.out.println(constantes.get("you_carry") + player.getInventoryContent());
+			System.out.println(constantes.get("you_not_carry")+ ": " + itemName);
+			System.out.println(constantes.get("you_carry")+ ": " + player.getInventoryContent());
 		}
 	}
 
