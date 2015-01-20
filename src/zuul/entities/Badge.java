@@ -98,11 +98,13 @@ public class Badge implements Serializable {
 		knowledges.remove(course);
 	}
 	
-	public void forgetACourse() {
+	public boolean forgetACourse() {
 		if (!knowledges.isEmpty()) {
 			int k = new Random().nextInt(this.knowledges.size());
 			this.knowledges.remove(k);
+			return true;
 		}
+		return false;
 	}
 
 	public void addLab(Lab lab) {

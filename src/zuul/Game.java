@@ -58,7 +58,7 @@ public class Game {
 	}
 
 	/* Basic getters */
-	public static HashMap<String, String> getConstantes() {
+	public static HashMap<String, String> getConst() {
 		return constantes;
 	}
 
@@ -394,11 +394,5 @@ public class Game {
 		} else {
 			return true; // signal that we want to quit
 		}
-	}
-
-	/**
-	 * @author Adrien Boucher
-	 * @return Constantes du jeu (textes)
-	 */
-	public static HashMap<String, String> getConst() { return constantes; }
+	}	
 }

@@ -183,8 +183,8 @@ public class Player {
 	/**
 	 * Method erasing randomly a lesson from player's mind
 	 */
-	public void forgetALesson() {
-		badge.forgetACourse();
+	public boolean forgetALesson() {
+		return badge.forgetACourse();
 	}
 
 	/**

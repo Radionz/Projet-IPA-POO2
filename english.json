@@ -38,5 +38,8 @@
 "what_quit":"Quit what?",
 "chocolate_bar_description":"Chocolate bar",
 "play_game_zuul":"You've played at World of Zuul",
-"play_game":"You've played a game and you've forgotten a lesson"
+"play_game":"You've played a game and you've forgotten a lesson",
+"lesson_forget":"You've forgotten a lesson",
+"play_babyfoot":"You're playing at the babyfoot",
+"dont_play_babyfoot":"You're not playing at the babyfoot"
 }

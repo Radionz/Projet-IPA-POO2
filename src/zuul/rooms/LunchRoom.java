@@ -27,17 +27,14 @@ public class LunchRoom extends Room{
     	return Game.getPlayer().use("coffee");
     }
     
-    public String playBabyfoot(){
-    	if(isForced()){
-    		Game.getPlayer().forgetALesson();
-    		return "You loose a lesson !";
-    	}
-    	else
-    		return "You don't loose a lesson !";
+    public String playBabyfoot(){		
+		return Game.getConst().get("play_babyfoot") + 
+				((Game.getPlayer().forgetALesson()) ? "\n" 
+				+ Game.getConst().get("lesson_forget") : "");
     }
 
     public boolean isForced(){
-        return new Random().nextInt(5) == 1;
+        return new Random().nextInt(5) <= 1;
     }
     
     /**
@@ -47,8 +44,8 @@ public class LunchRoom extends Room{
      */
     @Override
     public void enter(){
-    	if(isForced())
-    		playBabyfoot();
     	System.out.println(getLongDescription());
+    	if(isForced())
+    		System.out.println(playBabyfoot());
     }
 }
