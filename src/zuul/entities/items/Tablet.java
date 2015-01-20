@@ -1,5 +1,6 @@
 package zuul.entities.items;
 
+import zuul.Game;
 import zuul.io.IO;
 import zuul.studies.Course;
 
@@ -18,7 +19,12 @@ public class Tablet extends Item{
 	{
 		if(Math.random() < 0.5)
 		{
-			return "You've played a game";
+			if(Math.random() > 0.75)
+				return "You've played at World of Zuul";
+			
+			Game.getPlayer().forgetALesson();
+			
+			return "You've played a game and you've forgotten a lesson";
 		}
 		else
 		{
