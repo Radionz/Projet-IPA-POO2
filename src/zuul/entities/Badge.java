@@ -32,8 +32,8 @@ public class Badge implements Serializable {
 	 * listes de cours et de TD et d'exams réussis sont initialisées vides.
 	 */
 	public Badge(int energy) {
-		this.knowledges = new ArrayList<>(10);
-		this.abilities = new ArrayList<>(10);
+		this.knowledges = new ArrayList<>();
+		this.abilities = new ArrayList<>();
 		this.currentPOOLevel = 0;
 		this.energy = energy;
 		level = energy / NB;
