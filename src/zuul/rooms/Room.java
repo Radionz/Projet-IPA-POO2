@@ -26,6 +26,7 @@ import java.util.HashMap;
 
 public class Room {
     protected String description;
+    protected int level;
     protected HashMap<Exits, Room> exits;        // stores exits of this rooms
     protected ArrayList<Item> items;
     private ArrayList<Item> usableItems;
@@ -284,6 +285,11 @@ public class Room {
         }
 
     }
+
+
+	public int getLevel() {
+		return this.level;
+	}
 
 }
 

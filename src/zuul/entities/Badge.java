@@ -97,6 +97,13 @@ public class Badge implements Serializable {
 	public void removeCourse(Course course) {
 		knowledges.remove(course);
 	}
+	
+	public void forgetACourse() {
+		if (!knowledges.isEmpty()) {
+			int k = new Random().nextInt(this.knowledges.size());
+			this.knowledges.remove(k);
+		}
+	}
 
 	public void addLab(Lab lab) {
 		if (!abilities.contains(lab))
@@ -126,17 +133,7 @@ public class Badge implements Serializable {
 	 * badge.
 	 */
 	public String toString() {
-		String a;
-		ArrayList<Character> ArrayListvoyelles = new ArrayList<Character>(
-				Arrays.asList('a', 'e', 'i', 'o', 'u'));
-		if (ArrayListvoyelles.contains(Character.toLowerCase(joueur.getName()
-				.charAt(0)))) {
-			a = "d'";
-		} else
-			a = "de ";
-		return "Badge " + a + joueur + " (" + energy + "pts - level " + level
-				+ ")" + "\n" + "Cours: " + cours + "\n" + "Actvités réussies: "
-				+ activités;
+		return "";
 	}
 
 	public void setCurrentPOOLevel(int currentPOOLevel) {

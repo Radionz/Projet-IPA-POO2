@@ -168,54 +168,6 @@ public class Player {
 		return (res.length() > 3) ? res.substring(0, res.length() - 3) : res;
 	}
 
-	/**
-	 * Set an Amount of energy for the player
-	 * 
-	 * @param energy
-	 *            new amount of energy
-	 */
-	private void setEnergy(int energy) {
-		if (energy > 5) {
-			energy = 5;
-		} else if (energy < 0) {
-			energy = 0;
-		}
-		this.energy = energy;
-	}
-
-	/**
-	 * Gain a specific amount of energy
-	 * 
-	 * @param i
-	 *            amount of energy
-	 */
-	public void gainAmountEnergy(int i) {
-		setEnergy(energy + i);
-	}
-
-	/**
-	 * Gain one point of energy
-	 */
-	public void gainEnergy() {
-		setEnergy(energy + 1);
-	}
-
-	/**
-	 * Loose one point of energy
-	 */
-	public void looseEnergy() {
-		setEnergy(energy - 1);
-	}
-
-	/**
-	 * loose a specifig amount of energy
-	 * 
-	 * @param i
-	 *            amount of energy
-	 */
-	public void looseAmountEnergy(int i) {
-		setEnergy(energy - i);
-	}
 
 	public String use(String itemString) {
 		for (Item item : inventory) {
@@ -232,10 +184,7 @@ public class Player {
 	 * Method erasing randomly a lesson from player's mind
 	 */
 	public void forgetALesson() {
-		if (!knowledges.isEmpty()) {
-			int k = new Random().nextInt(this.knowledges.size());
-			this.knowledges.remove(k);
-		}
+		badge.forgetACourse();
 	}
 
 	/**
@@ -245,6 +194,11 @@ public class Player {
 	 *            Lab object to add
 	 */
 	public void improveAbilities(Lab lab) {
-		this.abilities.add(lab);
+		badge.addLab(lab);
+	}
+
+	public void gainAmountEnergy(int energy) {
+		badge.addEnergy(energy);
+		
 	}
 }
