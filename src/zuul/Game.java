@@ -239,7 +239,7 @@ public class Game {
 
 	// implementations of user commands:
 	private void printInventory(Command command) {
-		System.out.println(constantes.get("you_carry") + player.getInventoryContent());
+		System.out.println(constantes.get("you_carry") + ": " + player.getInventoryContent());
 	}
 
 	/**
