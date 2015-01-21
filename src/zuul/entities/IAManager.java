@@ -144,6 +144,7 @@ public class IAManager implements Runnable{
 		
 		while((running = runIA()))
 		{
+			//System.out.println("YOLO");
 			try {	Thread.sleep(1000);	
 			} catch (InterruptedException e) {	
 				e.printStackTrace();	

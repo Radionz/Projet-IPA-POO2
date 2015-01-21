@@ -1,6 +1,7 @@
 package zuul.studies;
 
 import zuul.Game;
+import zuul.Woz;
 
 /**
  * @author Nicolas Sarroche, Dorian Blanc
@@ -56,7 +57,7 @@ public class Lab {
      */
     public String answerQuestion(boolean answer) {
         Question q = questions[questionNum];
-        System.out.println(q.isAnswer());
+        Woz.writeMsg(q.isAnswer());
         if(answer == q.isAnswer()){
             grade++;
         }

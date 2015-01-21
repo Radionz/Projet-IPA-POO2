@@ -1,6 +1,7 @@
 package zuul.rooms;
 
 import zuul.Game;
+import zuul.Woz;
 import zuul.entities.NPC;
 import zuul.entities.Player;
 
@@ -50,6 +51,6 @@ public class LunchRoom extends Room{
     public void enter(Player player){
     	super.enter(player);
     	if(isForced())
-    		System.out.println(playBabyfoot(player));
+    		Woz.writeMsg(playBabyfoot(player));
     }
 }

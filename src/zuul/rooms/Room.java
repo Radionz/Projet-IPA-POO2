@@ -1,6 +1,7 @@
 package zuul.rooms;
 
 import zuul.Game;
+import zuul.Woz;
 import zuul.entities.NPC;
 import zuul.entities.Player;
 import zuul.entities.items.Item;
@@ -279,7 +280,7 @@ public class Room {
 	public boolean canUseDoCommand() { return actions.size() != 0; }
 
 	public void study(String answer) {
-		System.out.println(Game.getConst().get("not_in_examroom"));
+		Woz.writeMsg(Game.getConst().get("not_in_examroom"));
 	}
 
 	/**
@@ -288,9 +289,9 @@ public class Room {
 	public void enter(Player player) {
 		playersInRoom.add(player);
 		if(player instanceof NPC)		
-			System.out.println(player.getName() + " is " + description);
+			Woz.writeMsg(player.getName() + " is " + description);
 		else
-			System.out.println(getLongDescription());
+			Woz.writeMsg(getLongDescription());
 	}
 
 	/**

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import zuul.Game;
+import zuul.Woz;
 import zuul.entities.Player;
 import zuul.entities.NPC;
 
@@ -40,7 +41,7 @@ public class Library extends Room{
     public boolean canEnter(Player player){
     	if(!checkForschedule())
     	{
-    		System.out.println(player.getName() + ", " + Game.getConst().get("no_access_library"));
+    		Woz.writeMsg(player.getName() + ", " + Game.getConst().get("no_access_library"));
     		return false;
     	}
     	return true;    	

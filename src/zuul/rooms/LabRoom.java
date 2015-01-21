@@ -2,6 +2,7 @@ package zuul.rooms;
 
 import java.util.ArrayList;
 import zuul.Game;
+import zuul.Woz;
 import zuul.entities.Player;
 import zuul.studies.Lab;
 
@@ -115,11 +116,11 @@ public class LabRoom extends Room {
 		if (!(getLab().getSuccess())) {
 			if (isLabInProcess()
 					&& (answer.equals("true") || answer.equals("false"))) {
-				System.out.println(answerQuestion(answer));
+				Woz.writeMsg(answerQuestion(answer));
 			} else
-				System.out.println(Game.getConst().get("no_exam"));
+				Woz.writeMsg(Game.getConst().get("no_exam"));
 		} else {
-			System.out.println(Game.getConst().get("lab_over"));
+			Woz.writeMsg(Game.getConst().get("lab_over"));
 		}
 	}
 	

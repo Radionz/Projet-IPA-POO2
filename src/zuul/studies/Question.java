@@ -2,6 +2,7 @@ package zuul.studies;
 
 import java.io.IOException;
 
+import zuul.Woz;
 import zuul.io.IO;
 
 
@@ -80,12 +81,12 @@ public class Question {
         }
         if(splits[1].equals("T")){
             this.answer = true;
-            //System.out.println("true");
+            //Woz.writeMsg("true");
         }else if(splits[1].equals("F")){
             this.answer = false;
-            //System.out.println("false");
+            //Woz.writeMsg("false");
         }else{
-            System.out.println(splits[1]);
+            Woz.writeMsg(splits[1]);
         }
     }
 

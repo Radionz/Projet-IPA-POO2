@@ -179,9 +179,9 @@ public class Game {
 		boolean finished = false;
 		while (!finished) {			
 			Command command = parser.getCommand();
-			finished = gameManager.addCommandToProcess(player, command);	
+			finished = !gameManager.addCommandToProcess(player, command);	
 		}
-		System.out.println(constantes.get("close_game"));
+		Woz.writeMsg(constantes.get("close_game"));
 	}	
 
 
@@ -190,9 +190,9 @@ public class Game {
 	 * @return String of player's name.
 	 */
 	private String getPlayerName() {
-		System.out.println();
-		System.out.println(constantes.get("welcome"));
-		System.out.println(constantes.get("invite_enter_name"));
+		Woz.writeMsg();
+		Woz.writeMsg(constantes.get("welcome"));
+		Woz.writeMsg(constantes.get("invite_enter_name"));
 		return parser.getPlayerName();
 	}
 
@@ -200,9 +200,9 @@ public class Game {
 	 * Print out the opening message for the player.
 	 */
 	private void printWelcome() {
-		System.out.println(this.player.getName() + ", " + constantes.get("intro"));
-		System.out.println(constantes.get("need_help") + " : " + CommandWord.HELP);
-		System.out.println();
+		Woz.writeMsg(this.player.getName() + ", " + constantes.get("intro"));
+		Woz.writeMsg(constantes.get("need_help") + " : " + CommandWord.HELP);
+		Woz.writeMsg();
 		// Add the player to the first room -> print room description
 		player.enter(rooms.get(0));
 	}

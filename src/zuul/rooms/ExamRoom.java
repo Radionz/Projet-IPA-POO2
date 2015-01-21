@@ -3,6 +3,7 @@ package zuul.rooms;
 import java.util.ArrayList;
 
 import zuul.Game;
+import zuul.Woz;
 import zuul.entities.Player;
 import zuul.studies.Exam;
 import zuul.studies.Lab;
@@ -117,9 +118,9 @@ public class ExamRoom extends Room {
 	public void study(String answer) {
 		if (isExamInProcess()
 				&& (answer.equals("true") || answer.equals("false"))) {
-			System.out.println(answerQuestion(answer));
+			Woz.writeMsg(answerQuestion(answer));
 		} else
-			System.out.println(Game.getConst().get("no_exam"));
+			Woz.writeMsg(Game.getConst().get("no_exam"));
 	}
 	
 	@Override
