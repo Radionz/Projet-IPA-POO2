@@ -23,13 +23,13 @@ public class LunchRoom extends Room{
         actions.add("playBabyfoot");
     }
 
-    public String drinkCoffee(){
-    	return Game.getPlayer().use("coffee");
+    public String drinkCoffee(Player player){
+    	return player.use("coffee");
     }
     
-    public String playBabyfoot(){		
+    public String playBabyfoot(Player player){		
 		return Game.getConst().get("play_babyfoot") + 
-				((Game.getPlayer().forgetALesson()) ? "\n" 
+				((player.forgetALesson()) ? "\n" 
 				+ Game.getConst().get("lesson_forget") : "");
     }
 
@@ -46,6 +46,6 @@ public class LunchRoom extends Room{
     public void enter(Player player){
     	super.enter(player);
     	if(isForced())
-    		System.out.println(playBabyfoot());
+    		System.out.println(playBabyfoot(player));
     }
 }

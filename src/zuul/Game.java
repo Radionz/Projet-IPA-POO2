@@ -370,7 +370,7 @@ public class Game {
 		String itemName = command.getSecondWord();
 
 		// Try to use item in the current rooms.
-		if (player.getCurrentRoom().canUseItem(itemName)) {
+		if (p.getCurrentRoom().canUseItem(itemName)) {
 			System.out.println(p.use(itemName));
 		}
 		else {
@@ -393,7 +393,7 @@ public class Game {
 		String mehtod = command.getSecondWord();
 
 		// Try to use item in the current rooms.
-		System.out.println(p.getCurrentRoom().doSomething(mehtod));
+		System.out.println(p.getCurrentRoom().doSomething(player, mehtod));
 	}
 
 	/**

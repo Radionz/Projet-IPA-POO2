@@ -41,5 +41,11 @@
 "play_game":"You've played a game and you've forgotten a lesson",
 "lesson_forget":"You've forgotten a lesson",
 "play_babyfoot":"You're playing at the babyfoot",
-"dont_play_babyfoot":"You're not playing at the babyfoot"
+"dont_play_babyfoot":"You're not playing at the babyfoot",
+"IA_read_book":"has read a book",
+"light_on_ia":"has switched on the light.",
+"light_off_ia":"has switched off the light.",
+"light_on":"Lights on !",
+"light_off":"Lights off !",
+"self":"You"
 }

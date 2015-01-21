@@ -5,6 +5,7 @@ import java.util.Random;
 
 import zuul.Game;
 import zuul.entities.Player;
+import zuul.entities.NPC;
 
 /**
  * @author Nicolas Sarroche, Dorian Blanc
@@ -19,7 +20,10 @@ public class Library extends Room{
         actions.add("readBook");
     }
 
-    public String readBook(){
+    public String readBook(Player player){
+    	if(player instanceof NPC)
+    		return player.getName() + " " + Game.getConst().get("IA_read_book");
+    	
     	return "WOW I read a book !";    	
     }
 

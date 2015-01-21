@@ -2,7 +2,10 @@ package zuul.rooms;
 
 import java.util.ArrayList;
 
+import zuul.Game;
+import zuul.entities.Player;
 import zuul.entities.items.Item;
+import zuul.entities.NPC;
 
 /**
  * @author Nicolas Sarroche, Dorian Blanc
@@ -22,19 +25,27 @@ public class Corridor extends Room{
         super(description);
         this.light = false;
         this.actions = new ArrayList<String>();
-        actions.add("switchOn");
+        actions.add("toggleLight");
     }
 
+    
     /**
-     * method dynamically called
-     * switch on the light in the room
-     * @return the string "Lights ON !"
+     * @author Adrien Boucher
+     * 
+     * Toggle the light -> off <-> on
+     * 
+     * @param player
+     * @return
      */
-    public String switchOn(){
-        actions.add("switchOff");
-        actions.remove("switchOn");
-    	this.light = true;
-    	return "Lights ON !";
+    public String toggleLight(Player player){
+    	this.light = !light;
+    	
+    	if(player instanceof NPC)
+    		return player.getName() + " " + (light ? Game.getConst().get("light_on_ia") 
+    				: Game.getConst().get("light_off_ia"));
+    	else
+    		return Game.getConst().get("self") +
+    				(light ? Game.getConst().get("light_on") : Game.getConst().get("light_off"));
     }
 
     /**

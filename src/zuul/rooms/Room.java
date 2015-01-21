@@ -233,25 +233,27 @@ public class Room {
 		}
 		return false;
 	}
-
+	
+	
 	/**
-	 * Check the possible actions
 	 * 
-	 * @param action
-	 *            an action
-	 * @return a string if the action succeed or not
+	 * Try to execute an action
+	 * 
+	 * @param player	Player that do the action
+	 * @param action	Action to do
+	 * @return string that describe what happened
 	 */
-	public String doSomething(String action) {
+	public String doSomething(Player player, String action) {
 		if (actions.contains(action)) {
 			Method method = null;
 			try {
-				method = this.getClass().getMethod(action);
+				method = this.getClass().getMethod(action, player.getClass());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 
 			try {
-				return (String) method.invoke(this);
+				return (String) method.invoke(this, player);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

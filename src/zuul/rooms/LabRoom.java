@@ -26,8 +26,7 @@ public class LabRoom extends Room {
 	 * 
 	 * @return the question asked
 	 */
-	public String lab() {
-		Player player = Game.getPlayer();
+	public String lab(Player player) {
 		int pooLevel = player.getCurrentPOOLevel();
 		if (player.getKnowledges().size() >= pooLevel) {
 			actions.remove("lab");

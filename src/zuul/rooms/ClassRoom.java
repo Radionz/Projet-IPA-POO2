@@ -3,6 +3,7 @@ package zuul.rooms;
 import java.util.ArrayList;
 
 import zuul.Game;
+import zuul.entities.Player;
 import zuul.studies.Course;
 
 /**
@@ -43,7 +44,7 @@ public class ClassRoom extends Room {
 	 * 
 	 * @returnthe string of the lesson
 	 */
-	public String learn() {
+	public String learn(Player player) {
 		String returned = "";
 		if (lesson.isPOO()) {
 			returned += "You have to learn the course to the bitter end.\n";

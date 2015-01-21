@@ -3,6 +3,7 @@ package zuul.rooms;
 import java.util.ArrayList;
 
 import zuul.Game;
+import zuul.entities.Player;
 import zuul.studies.Exam;
 import zuul.studies.Lab;
 
@@ -33,7 +34,7 @@ public class ExamRoom extends Room {
 	 * 
 	 * @return the question string
 	 */
-	public String exam() {
+	public String exam(Player player) {
 		if (Game.getPlayer().getKnowledges().size() >= 5) {
 			boolean ok = false;
 			for (Lab l : Game.getPlayer().getAbilities()) {
