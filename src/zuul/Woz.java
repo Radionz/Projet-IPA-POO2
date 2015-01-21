@@ -6,7 +6,9 @@ package zuul;
 public class Woz {
 
     public static void main(String[] args){
-    	Game game = new Game();
+    	GameManager gm = new GameManager();
+    	
+    	Game game = new Game(gm);
 		game.play();
 		
     }

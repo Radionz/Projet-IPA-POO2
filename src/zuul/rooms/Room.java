@@ -247,7 +247,7 @@ public class Room {
 		if (actions.contains(action)) {
 			Method method = null;
 			try {
-				method = this.getClass().getMethod(action, player.getClass());
+				method = this.getClass().getMethod(action, Player.class);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Random;
 
 import zuul.Game;
+import zuul.GameManager;
 import zuul.io.Command;
 import zuul.io.CommandWord;
 import zuul.rooms.Room;
@@ -18,15 +19,17 @@ import zuul.rooms.Room;
  * Manage the IA's
  *	-> Make them act like a player
  */
-public class IAManager {
+public class IAManager implements Runnable{
 	private ArrayList<IA> listIA;
 	private ArrayList<Room> rooms;
 	private ArrayList<CommandWord> commands;
+	private GameManager manager;
 	
 	private Game game;
 	
-	public IAManager(ArrayList<Room> rooms)
+	public IAManager(GameManager gm, ArrayList<Room> rooms)
 	{
+		this.manager = gm;
 		this.rooms 		= rooms;
 		this.commands 	= new ArrayList<CommandWord>();
 		this.listIA 	= new ArrayList<IA>();
@@ -114,5 +117,37 @@ public class IAManager {
 		commands.add(CommandWord.PICK);
 		commands.add(CommandWord.DROP);
 		commands.add(CommandWord.ANSWER);
+	}
+	
+	public boolean runIA()
+	{		
+		HashMap<IA, Command> toProcess = generateCommandForIAs();
+		for(IA ia : toProcess.keySet())
+		{
+			if(!manager.addCommandToProcess(ia, toProcess.get(ia)))
+				return false;
+			
+			try {	Thread.sleep(1000);	
+			} catch (InterruptedException e) {	
+				e.printStackTrace();	
+			}
+		}	
+		
+		return true;
+	}
+
+	@Override
+	public void run() {
+		boolean running = true;
+		
+		initIA(rooms.get(0));
+		
+		while((running = runIA()))
+		{
+			try {	Thread.sleep(1000);	
+			} catch (InterruptedException e) {	
+				e.printStackTrace();	
+			}
+		}
 	}
 }

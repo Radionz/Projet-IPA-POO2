@@ -3,6 +3,7 @@ package zuul;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import zuul.GameManager.CommandToProcess;
 import zuul.entities.IA;
 import zuul.entities.IAManager;
 import zuul.entities.Player;
@@ -39,8 +40,9 @@ public class Game {
 	private Parser parser;
 	private static HashMap<String,String> constantes;
 	private ArrayList<Room> rooms;
-	private IAManager manager;
-
+	private IAManager managerIA;
+	private GameManager gameManager;
+	
 	private static Question[] questions;
 	private static Course[] lessons;
 
@@ -49,7 +51,7 @@ public class Game {
 	 * all questions and lessons arrays
 	 * and create a Player
 	 */
-	public Game() {
+	public Game(GameManager gm) {
 		try{
 			constantes = IO.getFromFile(IO.PossibleFiles.ENGLISH.getPath());
 		} catch(Exception e) {e.printStackTrace();}
@@ -62,7 +64,8 @@ public class Game {
 		player = new Player("", new Item(""), null);
 		parser = new Parser();
 		
-		manager = new IAManager(rooms);
+		managerIA = new IAManager(gm, rooms);
+		gameManager = gm;
 	}
 
 	/* Basic getters */
@@ -169,29 +172,18 @@ public class Game {
 		String playerName = getPlayerName();
 		printWelcome();
 		
-		manager.initIA(rooms.get(0));
-
+		new Thread(managerIA).start();
 		// Enter the main command loop. Here we repeatedly read commands and
 		// execute them until the game is over.
 
 		boolean finished = false;
 		while (!finished) {			
 			Command command = parser.getCommand();
-			finished = processCommand(command, player);	
-			runIA();
+			finished = gameManager.addCommandToProcess(player, command);	
 		}
 		System.out.println(constantes.get("close_game"));
-	}
-	
-	public void runIA()
-	{
-		HashMap<IA, Command> toProcess = manager.generateCommandForIAs();
-		for(IA ia : toProcess.keySet())
-		{
-			processCommand(toProcess.get(ia), ia);
-			try {	Thread.sleep(200);	} catch (InterruptedException e) {	e.printStackTrace();	}
-		}		
-	}
+	}	
+
 
 	/**
 	 * Print the beginning of the welcome message and allows the player to type his name.
@@ -222,208 +214,5 @@ public class Game {
 	 *            The command to be processed.
 	 * @return true If the command ends the game, false otherwise.
 	 */
-	public boolean processCommand(Command command, Player p) {
-		boolean wantToQuit = false;
-
-		CommandWord commandWord = command.getCommandWord();
-
-		switch (commandWord) {
-		case UNKNOWN:
-			System.out.println(constantes.get("dont_understand"));
-			break;
-
-		case HELP:
-			printHelp();
-			break;
-
-		case GO:
-			goRoom(command, p);
-			break;
-
-		case DO:
-			doSomething(command, p);
-			break;
-
-		case DROP:
-			dropItem(command, p);
-			break;
-
-		case PICK:
-			pickItem(command, p);
-			break;
-
-		case USE:
-			useItem(command, p);
-			break;
-
-		case INVENTORY:
-			printInventory(command, p);
-			break;
-
-		case ANSWER:
-			answerQuestion(command, p);
-			break;
-
-		case QUIT:
-			wantToQuit = quit(command, p);
-			break;
-
-		}
-		return wantToQuit;
-	}
-
-	// implementations of user commands:
-	private void printInventory(Command command, Player p) {
-		System.out.println(constantes.get("you_carry") + ": " + p.getInventoryContent());
-	}
-
-	/**
-	 * Print out some help information. Here we print some stupid, cryptic
-	 * message and a list of the command words.
-	 */
-	private void printHelp() {
-		System.out.println(constantes.get("help_intro"));
-		System.out.println(constantes.get("your_command_word"));
-		parser.showCommands();
-	}
-
-	/**
-	 * Try to go in one direction. If there is an exit, enter the new rooms,
-	 * otherwise print an error message.
-	 */
-	private void goRoom(Command command, Player p) {
-		if (!command.hasSecondWord()) {
-			// if there is no second word, we don't know where to go...
-			System.out.println(constantes.get("go_where"));
-			System.out.println(p.getCurrentRoom().getExitString());
-			return;
-		}
-		String direction = command.getSecondWord();
-
-		// Try to leave current rooms.
-		Room nextRoom = p.getCurrentRoom().getExit(direction);		
-
-		if (nextRoom == null) {
-			System.out.println(p.getName() + ", " + constantes.get("no_door"));
-		}else if(p.getCurrentRoom().isHidden() || (nextRoom.canEnter(p) && p.leaveRoom())){
-			p.enter(nextRoom);
-		}
-	}
-
-	/**
-	 * Method allowing the player to drop an item in the current room.
-	 * @param command
-	 */
-	private void dropItem(Command command, Player p) {
-		if (!command.hasSecondWord()) {
-			// if there is no second word, we don't know where to go...
-			System.out.println(constantes.get("what_drop"));
-			return;
-		}
-
-		String itemName = command.getSecondWord();
-		
-		// Try to drop item in the current rooms.
-		if(player.dropItem(p.getCurrentRoom(),itemName)){
-			System.out.println(constantes.get("ok_drop") + ": " + itemName);
-		}else{
-			System.out.println(constantes.get("you_not_carry")+ ": " + itemName);
-			System.out.println(constantes.get("you_carry")+ ": " + p.getInventoryContent());
-		}
-	}
-
-	/**
-	 * Method allowing you to pick an item in the current room
-	 * @param command item name
-	 */
-	private void pickItem(Command command, Player p) {
-		if (!command.hasSecondWord()) {
-			// if there is no second word, we don't know where to go...
-			System.out.println(constantes.get("what_pick"));
-			System.out.println(p.getCurrentRoom().getItemString());
-			return;
-		}
-
-		String itemName = command.getSecondWord();
-
-		// Try to pick item in the current rooms.
-		if(player.getCurrentRoom().hasItem(itemName)){
-			p.pickUp(p.getCurrentRoom(),itemName);
-			System.out.println(constantes.get("ok_pick") + ": " + itemName);
-		}else{
-			System.out.println(constantes.get("no") + itemName);
-			System.out.println(p.getCurrentRoom().getItemString());
-		}
-	}
-
-	/**
-	 * Method allowing you to use an item in the current room
-	 * @param command item name
-	 */
-	private void useItem(Command command, Player p) {
-		if (!command.hasSecondWord()) {
-			// if there is no second word, we don't know where to go...
-			System.out.println(constantes.get("what_use"));
-			return;
-		}
-
-		String itemName = command.getSecondWord();
-
-		// Try to use item in the current rooms.
-		if (p.getCurrentRoom().canUseItem(itemName)) {
-			System.out.println(p.use(itemName));
-		}
-		else {
-			System.out.println(constantes.get("no_use_item_here"));
-		}
-	}
-
-	/**
-	 * method allowing you to do some actions in different rooms
-	 * @param command full command to parse
-	 */
-	private void doSomething(Command command, Player p) {
-		if (!command.hasSecondWord()) {
-			// if there is no second word, we don't know where to go...
-			System.out.println(constantes.get("what_do"));
-			System.out.println(p.getCurrentRoom().getActionString());
-			return;
-		}
-
-		String mehtod = command.getSecondWord();
-
-		// Try to use item in the current rooms.
-		System.out.println(p.getCurrentRoom().doSomething(player, mehtod));
-	}
-
-	/**
-	 * method allowing you to answer question in some room as
-	 * LabRoom or ExamRoom
-	 * @param command the full command to parse
-	 */
-	private void answerQuestion(Command command, Player p) {
-		if (!command.hasSecondWord()) {
-			// if there is no second word, we don't know...
-			System.out.println(constantes.get("what_answer"));
-			return;
-		}
-
-		String answer = command.getSecondWord();
-		player.getCurrentRoom().study(answer);		
-	}
-
-	/**
-	 * "Quit" was entered. Check the rest of the command to see whether we
-	 * really quit the game.
-	 * 
-	 * @return true, if this command quits the game, false otherwise.
-	 */
-	private boolean quit(Command command, Player p) {
-		if (command.hasSecondWord()) {
-			System.out.println(constantes.get("what_quit"));
-			return false;
-		} else {
-			return true; // signal that we want to quit
-		}
-	}	
+	
 }
