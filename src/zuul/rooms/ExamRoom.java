@@ -120,5 +120,11 @@ public class ExamRoom extends Room {
 		} else
 			System.out.println(Game.getConst().get("no_exam"));
 	}
+	
+	@Override
+	public boolean canUseAnswerCommand()
+	{
+		return true;
+	}
 
 }

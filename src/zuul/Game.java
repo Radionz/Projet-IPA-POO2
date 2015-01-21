@@ -164,15 +164,12 @@ public class Game {
 	/**
 	 * Main play routine. Loops until end of play.
 	 */
-	public void play() {
-		
-		manager.initIA(rooms.get(0));
-		System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-		System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-		System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+	public void play() {		
 		
 		String playerName = getPlayerName();
 		printWelcome();
+		
+		manager.initIA(rooms.get(0));
 
 		// Enter the main command loop. Here we repeatedly read commands and
 		// execute them until the game is over.
@@ -188,9 +185,12 @@ public class Game {
 	
 	public void runIA()
 	{
-		IA ia = manager.getNextIA();
-		processCommand(manager.getCommandForIA(ia), ia);
-		try {	Thread.sleep(1000);	} catch (InterruptedException e) {	e.printStackTrace();	}
+		HashMap<IA, Command> toProcess = manager.generateCommandForIAs();
+		for(IA ia : toProcess.keySet())
+		{
+			processCommand(toProcess.get(ia), ia);
+			try {	Thread.sleep(200);	} catch (InterruptedException e) {	e.printStackTrace();	}
+		}		
 	}
 
 	/**

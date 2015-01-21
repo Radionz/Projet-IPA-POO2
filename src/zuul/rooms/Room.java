@@ -68,6 +68,12 @@ public class Room {
 	public void putExit(Exits exit, Room room) {
 		exits.put(exit.getOpposite(), room);
 	}
+	
+	public String getRandomExitDirection()
+	{
+		Set<Exits> exitList = exits.keySet(); 
+		return ((Exits)(exitList.toArray())[new Random().nextInt(exitList.size())]).getValue();
+	}
 
 	/**
 	 * @return The short description of the rooms (the one that was defined in
@@ -103,6 +109,13 @@ public class Room {
 		return (returnString.length() > 3) ? returnString.substring(0,
 				returnString.length() - 3) : returnString;
 	}
+	
+	/**
+	 * @author Adrien Boucher
+	 * 
+	 * @return an arraylist containing all the actions available in the room
+	 */
+	public ArrayList<String> getActions()	{	return actions;		}
 
 	/**
 	 * list of items in the room
@@ -247,6 +260,21 @@ public class Room {
 		}
 		return null;
 	}
+	
+	/**
+	 * Tells if a player can use the answer command in the room
+	 * -> Used for IAs
+	 * @return true if the command is available
+	 */
+	public boolean canUseAnswerCommand(){ return false; }
+	
+	
+	/**
+	 * Tells if a player can use the "DO" command
+	 * -> Used for IAs
+	 * @return true if there is a least 1 action available
+	 */
+	public boolean canUseDoCommand() { return actions.size() != 0; }
 
 	public void study(String answer) {
 		System.out.println(Game.getConst().get("not_in_examroom"));
@@ -258,7 +286,7 @@ public class Room {
 	public void enter(Player player) {
 		playersInRoom.add(player);
 		if(player instanceof NPC)		
-			System.out.println("\n" + player.getName() + " is " + description + "\n");
+			System.out.println(player.getName() + " is " + description);
 		else
 			System.out.println(getLongDescription());
 	}

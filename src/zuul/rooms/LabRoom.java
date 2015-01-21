@@ -124,6 +124,12 @@ public class LabRoom extends Room {
 		}
 	}
 	
+	@Override
+	public boolean canUseAnswerCommand()
+	{
+		return true;
+	}
+	
 	/**
      * @author Adrien Boucher
      */
