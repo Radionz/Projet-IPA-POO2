@@ -1,6 +1,7 @@
 package zuul.rooms;
 
 import zuul.Game;
+import zuul.entities.NPC;
 import zuul.entities.Player;
 
 import java.util.ArrayList;
@@ -27,7 +28,10 @@ public class LunchRoom extends Room{
     	return player.use("coffee");
     }
     
-    public String playBabyfoot(Player player){		
+    public String playBabyfoot(Player player){	
+    	if(player instanceof NPC)
+    		return player.getName() + Game.getConst().get("IA_play_babyfoot");
+    		
 		return Game.getConst().get("play_babyfoot") + 
 				((player.forgetALesson()) ? "\n" 
 				+ Game.getConst().get("lesson_forget") : "");

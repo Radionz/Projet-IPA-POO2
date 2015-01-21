@@ -41,34 +41,12 @@ public class Corridor extends Room{
     	this.light = !light;
     	
     	if(player instanceof NPC)
-    		return player.getName() + " " + (light ? Game.getConst().get("light_on_ia") 
-    				: Game.getConst().get("light_off_ia"));
+    		return player.getName() + " " + (light ? Game.getConst().get("IA_light_on") 
+    				: Game.getConst().get("IA_light_off"));
     	else
     		return Game.getConst().get("self") +
     				(light ? Game.getConst().get("light_on") : Game.getConst().get("light_off"));
-    }
-
-    /**
-     *  method dynamically called
-     * switch off the light in the room
-     * @return the string "Lights OFF !"
-     */
-    public String switchOff(){
-    	actions.remove("switchOff");
-        actions.add("switchOn");
-    	this.light = true;
-    	return "Lights OFF !";
-    }
-
-    /**
-     * method dynamically called
-     * invert light switch
-     * on => off
-     * off => on
-     */
-    public void switchLight() {
-        this.light = !this.light;
-    }
+    } 
 
 
     /**
