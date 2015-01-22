@@ -1,6 +1,8 @@
 package zuul.io;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -65,16 +67,12 @@ public class Parser {
     /**
      * @return The next command from the user.
      */
-    public Command getCommand(String input) {
-     
-        String word1 = null;
-        String word2 = "";
+    public Command getCommand(String input) {        
+        List<String> cmd = Arrays.asList(input.split(" "));
         
-        String[] cmd = input.split(" ");
-        
-        if(!cmd[0].isEmpty())        	
+        if(!cmd.isEmpty())        	
         {
-        	return new Command(commands.getCommandWord(cmd[0]), cmd[1]);
+        	return new Command(commands.getCommandWord(cmd.get(0)), (cmd.size() > 1 ? cmd.get(1) : ""));
         }
         
         throw new IllegalArgumentException();
