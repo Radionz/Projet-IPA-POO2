@@ -2,7 +2,7 @@ package zuul.entities.items;
 
 import zuul.Game;
 import zuul.io.IO;
-import zuul.studies.Course;
+import zuul.studies.Lesson;
 
 /**
  * @author Nicolas Sarroche, Dorian Blanc
@@ -20,14 +20,14 @@ public class Tablet extends Item{
 		if(Math.random() < 0.5)
 		{
 			if(Math.random() > 0.75)
-				return Game.getConst().get("play_game_zuul");
+				return (String) Game.getConst().get("play_game_zuul");
 			// If the game is not world of zuul, the player forget a lesson
 			Game.getPlayer().forgetALesson();		
-			return Game.getConst().get("play_game");
+			return (String) Game.getConst().get("play_game");
 		}
 		else
 		{
-			Course l = new Course((Math.random() < 0.5), 1);
+			System.err.println("TODO : implement lesson on tablet");
 			return "You've learned something new";
 		}
 	}

@@ -1,0 +1,27 @@
+{
+	"id": 7,
+    "course": "POO",
+    "lesson": "Today we will learn about static type. Basically, we call 'static type' the type of the declaration. if you declare 'A a= new C()', the 'static type' of a is A.  This is it for this short POO lesson about static type, see you for another one.",
+    "questions": [
+      {
+        "question": "Question 1",
+        "answer": true
+      },
+      {
+        "question": "Question 2",
+        "answer": true
+      },
+      {
+        "question": "Question 3",
+        "answer": true
+      },
+      {
+        "question": "Question 4",
+        "answer": true
+      },
+      {
+        "question": "Question 5",
+        "answer": true
+      }
+    ]
+  }

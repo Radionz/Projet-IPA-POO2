@@ -3,10 +3,10 @@ package zuul.rooms;
 import java.util.ArrayList;
 
 import zuul.Game;
-import zuul.Woz;
 import zuul.entities.Player;
+import zuul.entities.items.ExamPaper;
 import zuul.studies.Exam;
-import zuul.studies.Lab;
+
 
 /**
  * @author Nicolas Sarroche, Dorian Blanc
@@ -14,7 +14,10 @@ import zuul.studies.Lab;
 public class ExamRoom extends Room {
 
 	private Exam exam;
-	private boolean examInProcess = false;
+
+	public Exam getExam() {
+		return this.exam;
+	}
 
 	/**
 	 * Create a rooms described "description". Initially, it has no exits.
@@ -25,108 +28,39 @@ public class ExamRoom extends Room {
 	 */
 	public ExamRoom(String description) {
 		super(description);
-		this.exam = new Exam();
-		this.actions = new ArrayList<String>();
-		actions.add("exam");
+		actions = new ArrayList<String>();
+		exam = null;
+	}
+
+	public void enter(Player player) {
+		exam = Game.getPlayer().getRandomExam();
+		System.out.println(getLongDescription());
+		if(exam == null)
+			System.out.println("You must do the corresponding lab");
+		else if (exam.isPoo()) {
+			System.out.println("Exam of POO, you must do the exam!");
+			exam(player);
+		}else {
+			actions.add("exam");
+		}
 	}
 
 	/**
-	 * Dynamic call of exam
+	 * method dynamically called action to perform in ClassRoom
 	 * 
-	 * @return the question string
+	 * @param player
+	 * 
+	 * @returnthe string of the lesson
 	 */
-	public String exam(Player player) {
-		if (Game.getPlayer().getKnowledges().size() >= 5) {
-			boolean ok = false;
-			for (Lab l : Game.getPlayer().getAbilities()) {
-
-			}
+	public boolean exam(Player player) {
+		if (actions.contains("exam")) {
 			actions.remove("exam");
-			examInProcess = true;
-			return exam.askQuestion();
-		} else {
-			return "You can't pass the exam now, come back later !";
+			if (exam.takeAnExam() >= 10) {
+				return player.addExam(new ExamPaper(exam, 0));
+			}else
+				System.out.println("You have not passed the exam");
 		}
-
+		System.out.println("This exam is complete, you can exit the room.");
+		return false;
 	}
-
-	/**
-	 * get the exam
-	 * 
-	 * @return current exam
-	 */
-	public Exam getExam() {
-		return exam;
-	}
-
-	/**
-	 * method allowing you to know if there is an exaù
-	 * 
-	 * @return
-	 */
-	public boolean isExamInProcess() {
-		return examInProcess;
-	}
-
-	/**
-	 * method allowing you to answer a question
-	 * 
-	 * @param answer
-	 *            string of the answer
-	 * @return if the answer is right
-	 */
-	public String answerQuestion(String answer) {
-		String returned = "";
-		if (answer.equals(true))
-			returned = exam.answerQuestion(true);
-		else
-			returned = exam.answerQuestion(false);
-
-		if (returned.startsWith("Exam done")) {
-			examInProcess = false;
-		}
-		return returned;
-	}
-
-	/**
-	 * specific exit for ExamRoom : depends on if it's over, or not.
-	 * 
-	 * @param direction
-	 *            The exit's direction.
-	 * @return a room in a certain direction
-	 */
-	public Room getExit(String direction) {
-		if (!examInProcess || actions.contains("learn")) {
-			if (!examInProcess) {
-				Game.getPlayer().setCurrentPOOLevel(
-						Game.getPlayer().getCurrentPOOLevel() + 1);
-			}
-			if (!actions.contains("exam")) {
-				actions.add("exam");
-			}
-			return exits.get(Exits.getAnExit(direction));
-		}
-		return null;
-	}
-
-	/**
-	 * @author Adrien Boucher
-	 * 
-	 *         Study in the room
-	 */
-	@Override
-	public void study(String answer) {
-		if (isExamInProcess()
-				&& (answer.equals("true") || answer.equals("false"))) {
-			Woz.writeMsg(answerQuestion(answer));
-		} else
-			Woz.writeMsg(Game.getConst().get("no_exam"));
-	}
-	
-	@Override
-	public boolean canUseAnswerCommand()
-	{
-		return true;
-	}
-
 }

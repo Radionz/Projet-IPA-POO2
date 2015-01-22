@@ -1,9 +1,10 @@
 package zuul.rooms;
 
 import java.util.ArrayList;
+
 import zuul.Game;
-import zuul.Woz;
-import zuul.entities.*;
+import zuul.entities.Player;
+import zuul.entities.items.LabPaper;
 import zuul.studies.Lab;
 
 /**
@@ -12,134 +13,56 @@ import zuul.studies.Lab;
 public class LabRoom extends Room {
 
 	private Lab lab;
-	private boolean labInProcess;
-
-	public LabRoom(String description) {
-		super(description);
-		this.lab = new Lab(0);
-		this.actions = new ArrayList<String>();
-		labInProcess = false;
-		actions.add("lab");
-	}
-
-	/**
-	 * Dynamic methoc called
-	 * 
-	 * @return the question asked
-	 */
-	public String lab(Player player) {
-		//int pooLevel = player.getCurrentPOOLevel();
-		if (!(player instanceof NPC)) {
-			actions.remove("lab");
-			this.labInProcess = true;
-			return lab.askQuestion();
-		}
-		else
-			return player.getName() + " did the lab .";
-		//return "You can't do this lab without the proper lesson !";
-	}
-
-	/**
-	 * Check the answer
-	 * 
-	 * @param answer
-	 *            the answer
-	 * @return if the answer is good or not
-	 */
-	public String answerQuestion(String answer) {
-		String returned = "";
-		if (answer.equals("true"))
-			returned = lab.answerQuestion(true);
-		else
-			returned = lab.answerQuestion(false);
-
-		if (returned.startsWith("Lab done")) {
-			actions.add("lab");
-			labInProcess = false;
-		}
-		return returned;
-	}
-
-	/**
-	 * Return true if there is currently a lab
-	 * 
-	 * @return labInProcess
-	 */
-	public boolean isLabInProcess() {
-		return labInProcess;
-	}
 
 	public Lab getLab() {
 		return this.lab;
 	}
 
 	/**
-	 * Set a new Lab and add the action "lab" to action list
+	 * Create a rooms described "description". Initially, it has no exits.
+	 * "description" is something like "a kitchen" or "an open court yard".
 	 * 
-	 * @param lab
+	 * @param description
+	 *            The rooms's description.
 	 */
-	public void setLab(Lab lab) {
-		actions.add("lab");
-		this.lab = lab;
+	public LabRoom(String description) {
+		super(description);
+		actions = new ArrayList<String>();
+		lab = null;
 	}
 
-	/**
-	 * specific exit for LabRoom : depends on if it's over, or not.
-	 * 
-	 * @param direction
-	 *            The exit's direction.
-	 * @return a room in a certain direction
-	 */
-	public Room getExit(String direction) {
-		if (lab.getSuccess() || actions.contains("lab")) {
+	public void enter(Player player) {
+		lab = player.getRandomLab();
+		System.out.println(getLongDescription());
 
-			if (lab.getSuccess()) {
-				Game.getPlayer().improveAbilities(lab);
-				Game.getPlayer().setCurrentPOOLevel(
-						Game.getPlayer().getCurrentPOOLevel() + 1);
-			}
-
-			if (!actions.contains("lab")) {
-				actions.add("lab");
-			}
-
-			return exits.get(Exits.getAnExit(direction));
-		}
-		return null;
-	}
-
-	/**
-	 * @author Adrien Boucher
-	 * 
-	 *         Study in the room
-	 */
-	@Override
-	public void study(String answer) {
-		if (!(getLab().getSuccess())) {
-			if (isLabInProcess()
-					&& (answer.equals("true") || answer.equals("false"))) {
-				Woz.writeMsg(answerQuestion(answer));
-			} else
-				Woz.writeMsg(Game.getConst().get("no_exam"));
+		if (lab == null) {
+			System.out.println("You must learn the proper lesson");
+			return;
+		} else if (lab.isPoo()) {
+			System.out.println("Lab of POO, you must do the lab!");
+			lab(player);
 		} else {
-			Woz.writeMsg(Game.getConst().get("lab_over"));
+			actions.add("lab");
 		}
+
 	}
-	
-	@Override
-	public boolean canUseAnswerCommand()
-	{
-		return true;
-	}
-	
+
 	/**
-     * @author Adrien Boucher
-     */
-    @Override
-    public void enter(Player player){
-    	super.enter(player);
-    	if(getLab().getSuccess()){
-			setLab(new Lab(Game.getPlayer().getCurrentPOOLevel()+1));//lessons[player.getCurrentPOOLevel() + 1]);
+	 * method dynamically called action to perform in ClassRoom
+	 * 
+	 * @param player
+	 * 
+	 * @returnthe string of the lesson
+	 */
+	public boolean lab(Player player) {
+		if (actions.contains("lab")) {
+			actions.remove("lab");
+			if (lab.takeALab() >= 10) {
+				return player.addLab(new LabPaper(lab, 0));
+			} else
+				System.out.println("You have not passed the lab");
 		}
-    }
+		System.out.println("This lab is complete, you can exit the room.");
+		return false;
+	}
 }

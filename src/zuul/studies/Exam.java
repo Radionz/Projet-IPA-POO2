@@ -1,66 +1,90 @@
 package zuul.studies;
 
 import java.util.ArrayList;
-import java.util.Random;
+import java.util.InputMismatchException;
+import java.util.Scanner;
 
-import zuul.Game;
-
-/**
- * @author Nicolas Sarroche, Dorian Blanc
- */
 public class Exam {
 
-    private ArrayList<Question> questions;
-    private int pointerQuestion = 0;
-    private int grade = 0;
+	private int id;
+	private ArrayList<Question> questions;
+	private Lab lab;
+	private int mark;
+	private Scanner scanner;
+	private boolean done;
 
-	/**
-	 * Exam constructor
-	 */
-    public Exam(){
-        questions = new ArrayList<Question>();
-		for(int i = 0; i < 5; i++){
-			questions.add(Game.getQuestions()[(i*3)+ new Random().nextInt(3)]);
-		}
-    }
-
-
-	// getters / setters //
-    public ArrayList<Question> getQuestions() {
-        return questions;
-    }
-
-	/**
-	 * method allowing you to answer a question
-	 * @param answer player's answer
-	 * @return if the answer is right
-	 */
-	public String answerQuestion(boolean answer) {
-		Question q = questions.get(pointerQuestion);
-		if(q.isAnswer() == answer)
-			grade++;
-		pointerQuestion++;
-		return nextQuestion();
+	public int getId() {
+		return id;
 	}
 
-
-	/**
-	 * method allowing you to display the next question
-	 * @return string of the question
-	 */
-	private String nextQuestion() {
-		if (pointerQuestion < questions.size()) {
-			return questions.get(pointerQuestion).getQuestion();
-		}else{
-			return "Exam done, you've got "+grade+"/5";
-		}
+	public boolean isDone() {
+		return done;
 	}
 
-	/**
-	 * method allowing you to ask a question
-	 * @return string of the question
-	 */
-	public String askQuestion() {
-		return questions.get(pointerQuestion).getQuestion();
+	public ArrayList<Question> getQuestions() {
+		return questions;
+	}
+
+	public int getMark() {
+		return mark;
+	}
+
+	public int getMark20() {
+		return mark * 20 / getNumberOfQuestions();
+	}
+	
+	private int getNumberOfQuestions() {
+		return questions.size();
+	}
+	
+	public String getCourse() {
+		return lab.getCourse();
+	}
+
+	public Exam(Lab lab) {
+		this.lab = lab;
+		this.id = (int) lab.getId();
+		this.questions = lab.getLesson().getQuestions();
+		this.mark = 0;
+		this.done = false;
+	}
+
+	public int takeAnExam() {
+		if (!lab.isDone()) {
+			System.err.println("You must have passed the lab of "+getCourse()+" before passing this Exam.");
+			return 0;
+		}
+		System.out.println("--- Exam of " +getCourse()+" ---");
+		scanner = new Scanner(System.in);
+		for (Question question : questions) {
+			mark += askAQuestion(question) ? 1 : 0;
+		}
+		//scanner.close();
+		System.out.println("You've got a " + getMark20() + "/20.");
+		this.done = true;
+		return mark;
+	}
+
+	private boolean askAQuestion(Question question) {
+		System.out.println(question.ask());
+		try {
+			boolean answer = scanner.nextBoolean();
+			return question.isAnswer(answer);
+		} catch (InputMismatchException e) {
+			System.err.println("You must answer true or false.");
+			scanner.next();
+			askAQuestion(question);
+		}
+		return false;
+	}
+
+	public boolean isPassed() {
+		if (!done)
+			return false;
+		return getMark20() >= 10;
+	}
+	
+	public boolean isPoo() {
+		return lab.isPoo();
 	}
 }

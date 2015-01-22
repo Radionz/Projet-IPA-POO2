@@ -1,0 +1,27 @@
+{
+	"id": 2,
+    "course": "Biology",
+    "lesson": "Each type of protein is usually sent to a particular part of the cell. An important part of cell biology is the investigation of molecular mechanisms by which proteins are moved to different places inside cells or secreted from cells.\n Most proteins are synthesized by ribosomes in the rough endoplasmic reticulum (RER). Ribosomes contain the nucleic acid RNA, which assembles and joins amino acids to make proteins. They can be found alone or in groups within the cytoplasm as well as on the RER. This is it for this lesson on Cells",
+    "questions": [
+      {
+        "question": "Question 1",
+        "answer": true
+      },
+      {
+        "question": "Question 2",
+        "answer": true
+      },
+      {
+        "question": "Question 3",
+        "answer": true
+      },
+      {
+        "question": "Question 4",
+        "answer": true
+      },
+      {
+        "question": "Question 5",
+        "answer": true
+      }
+    ]
+ }

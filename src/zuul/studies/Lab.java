@@ -1,79 +1,115 @@
 package zuul.studies;
 
-import zuul.Game;
-import zuul.Woz;
+import java.util.ArrayList;
+import java.util.InputMismatchException;
+import java.util.Random;
+import java.util.Scanner;
 
-/**
- * @author Nicolas Sarroche, Dorian Blanc
- */
 public class Lab {
 
-    private Question[] questions;
-    private boolean succeed;
-    private int questionNum;
-    private int grade;
-    private int i;
+	private int id;
+	private ArrayList<Question> questions;
+	private Lesson lesson;
+	private int mark;
+	private Scanner scanner;
+	private boolean done;
 
-    public Lab(int i){
-        this.i = i;
-        questions = new Question[3];
-        //System.arraycopy(Game.getQuestions(), i * 3, questions, 0, i);
-        for(int k = 0; k<3;k++){
-            questions[k]=Game.getQuestions()[(i*3)+k];
-        }
-        this.questionNum = 0;
-        this.grade = 0;
-        this.succeed = false;
-    }
+	public int getId() {
+		return id;
+	}
 
-    /* basic getters */
-    public Question[] getQuestions() {
-        return questions;
-    }
+	public boolean isDone() {
+		return done;
+	}
 
-    public void isSucceed(){
-        this.succeed= (this.questionNum == 3);
-    }
+	public ArrayList<Question> getQuestions() {
+		return questions;
+	}
 
-    public boolean getSuccess(){
-        isSucceed();
-        return this.succeed;
-    }
-    /* basic getters */
+	public int getMark() {
+		return mark;
+	}
 
-    /**
-     * method allowing you to display a question
-     * @return a string of the question
-     */
-    public String askQuestion() {
-        //return Game.getQuestions()[Game.getPlayer().getCurrentPOOLevel()*3+questionNum].getQuestion();
-        return questions[questionNum].getQuestion();
-    }
+	public int getMark20() {
+		return mark * 20 / getNumberOfQuestions();
+	}
+	
+	public String getCourse() {
+		return lesson.getCourse();
+	}
+	
+	public Lesson getLesson() {
+		return lesson;
+	}
 
-    /**
-     * method allowing you to answer a question
-     * @param answer answer to check
-     * @return if the answer is right
-     */
-    public String answerQuestion(boolean answer) {
-        Question q = questions[questionNum];
-        Woz.writeMsg(q.isAnswer());
-        if(answer == q.isAnswer()){
-            grade++;
-        }
-        questionNum++;
-        return nextQuestion();
-    }
+	public Lab(Lesson lesson) {
+		this.lesson = lesson;
+		this.id = (int) lesson.getId();
+		this.questions = lesson.getQuestions();
+		this.mark = 0;
+		this.done = false;
+	}
 
-    /**
-     * method allowing you to display next question
-     * @return string of the next question
-     */
-    private String nextQuestion() {
-        if (questionNum < questions.length) {
-            return this.getQuestions()[questionNum].getQuestion();
-        }else{
-            return "Lab done, you've got "+ grade +"/3";
-        }
-    }
+	public Lab(Lesson lesson, int numberOfQuestion) {
+		this.lesson = lesson;
+		this.questions = new ArrayList<Question>();
+		Random random = new Random();
+		if (numberOfQuestion > lesson.getNumberOfQuestions()) {
+			numberOfQuestion = lesson.getNumberOfQuestions();
+			System.err
+					.println("You asked to have more questions than there are in the course.");
+		}
+		while (questions.size() < numberOfQuestion)
+			addQuestion(lesson.getRandomQuestion(random));
+		this.mark = 0;
+		this.done = false;
+	}
+
+	private void addQuestion(Question question) {
+		if (!questions.contains(question))
+			questions.add(question);
+	}
+
+	public int getNumberOfQuestions() {
+		return questions.size();
+	}
+
+	public int takeALab() {
+		if (!lesson.isDone()) {
+			System.err.println("You must have attended the course of "+getCourse()+" before passing this Lab.");
+			return 0;
+		}
+		System.out.println("--- Lab of " +getCourse()+" ---");
+		scanner = new Scanner(System.in);
+		for (Question question : questions) {
+			mark += askAQuestion(question) ? 1 : 0;
+		}
+		//scanner.close();
+		System.out.println("You've got a " + getMark20() + "/20.");
+		this.done = true;
+		return getMark20();
+	}
+
+	private boolean askAQuestion(Question question) {
+		System.out.println(question.ask());
+		try {
+			boolean answer = scanner.nextBoolean();
+			return question.isAnswer(answer);
+		} catch (InputMismatchException e) {
+			System.err.println("You must answer true or false.");
+			scanner.next();
+			askAQuestion(question);
+		}
+		return false;
+	}
+
+	public boolean isPassed() {
+		if (!done)
+			return false;
+		return getMark20() >= 10;
+	}
+
+	public boolean isPoo() {
+		return lesson.isPoo();
+	}
 }

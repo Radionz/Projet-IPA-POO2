@@ -8,7 +8,6 @@ import java.util.Random;
 import zuul.Game;
 import zuul.GameManager;
 import zuul.io.Command;
-import zuul.io.CommandWord;
 import zuul.rooms.Room;
 
 
@@ -21,8 +20,7 @@ import zuul.rooms.Room;
  */
 public class IAManager implements Runnable{
 	private ArrayList<IA> listIA;
-	private ArrayList<Room> rooms;
-	private ArrayList<CommandWord> commands;
+	private ArrayList<Room> rooms;	
 	private GameManager manager;
 	
 	private Game game;
@@ -31,12 +29,11 @@ public class IAManager implements Runnable{
 	{
 		this.manager = gm;
 		this.rooms 		= rooms;
-		this.commands 	= new ArrayList<CommandWord>();
 		this.listIA 	= new ArrayList<IA>();
 		
-		addIA(new IA("Dorian le violent"));
+		//addIA(new IA("Dorian le violent"));
 		addIA(new IA("Toto"));
-		addIA(new IA("Jean Gui"));
+		//addIA(new IA("Jean Gui"));
 	}
 	
 	public void addIA(IA npc){ listIA.add(npc); }
@@ -91,8 +88,8 @@ public class IAManager implements Runnable{
 		boolean canDo = currentRoom.canUseDoCommand();
 		//boolean canAnwser = currentRoom.canUseAnswerCommand();
 		
-		if(canDo && Math.random() < 0.3)
-			return generateDoCommand(ia);
+//		if(canDo && Math.random() < 0.3)
+//			return generateDoCommand(ia);
 		
 		return generateValidGoCommand(ia);		
 	}
@@ -102,21 +99,12 @@ public class IAManager implements Runnable{
 		ArrayList<String> actions = ia.getCurrentRoom().getActions();
 		String action = actions.get(new Random().nextInt(actions.size()));
 		
-		return new Command(CommandWord.DO, action);
+		return new Command("action", action);
 	}
 	
 	public Command generateValidGoCommand(IA ia)
 	{
-		return new Command(CommandWord.GO, ia.getCurrentRoom().getRandomExitDirection());
-	}
-	
-	public void initCommandWords()
-	{
-		commands.add(CommandWord.GO);
-		commands.add(CommandWord.DO);
-		commands.add(CommandWord.PICK);
-		commands.add(CommandWord.DROP);
-		commands.add(CommandWord.ANSWER);
+		return new Command("go", ia.getCurrentRoom().getRandomExitDirection());
 	}
 	
 	public boolean runIA()
@@ -127,7 +115,7 @@ public class IAManager implements Runnable{
 			if(!manager.addCommandToProcess(ia, toProcess.get(ia)))
 				return false;
 			
-			try {	Thread.sleep(1000);	
+			try {	Thread.sleep(100);	
 			} catch (InterruptedException e) {	
 				e.printStackTrace();	
 			}
@@ -144,11 +132,11 @@ public class IAManager implements Runnable{
 		
 		while((running = runIA()))
 		{
-			//System.out.println("YOLO");
-			try {	Thread.sleep(1000);	
-			} catch (InterruptedException e) {	
-				e.printStackTrace();	
-			}
+//			//System.out.println("YOLO");
+//			try {	Thread.sleep(100);	
+//			} catch (InterruptedException e) {	
+//				e.printStackTrace();	
+//			}
 		}
 	}
 }

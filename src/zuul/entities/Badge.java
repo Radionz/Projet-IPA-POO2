@@ -11,7 +11,7 @@ import java.util.*;
 import java.io.Serializable;
 
 import zuul.rooms.Room;
-import zuul.studies.Course;
+import zuul.studies.Lesson;
 import zuul.studies.Exam;
 import zuul.studies.Lab;
 
@@ -23,7 +23,7 @@ public class Badge implements Serializable {
 
 	private int energy; // l'énergie totale
 	private int level; // le niveau du joueur - dépend de l'énergie!
-	private ArrayList<Course> knowledges;
+	private ArrayList<Lesson> knowledges;
 	private ArrayList<Lab> abilities;
 	private int currentPOOLevel;
 
@@ -58,7 +58,7 @@ public class Badge implements Serializable {
 		return level;
 	}
 
-	public ArrayList<Course> getKnowledges() {
+	public ArrayList<Lesson> getKnowledges() {
 		return knowledges;
 	}
 
@@ -89,12 +89,12 @@ public class Badge implements Serializable {
 	 * @param newCours
 	 *            de type Cours
 	 */
-	public void addCourse(Course course) {
+	public void addCourse(Lesson course) {
 		if (!knowledges.contains(course))
 			knowledges.add(course);
 	}
 
-	public void removeCourse(Course course) {
+	public void removeCourse(Lesson course) {
 		knowledges.remove(course);
 	}
 	

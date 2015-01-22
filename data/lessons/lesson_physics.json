@@ -1,0 +1,27 @@
+{
+	"id": 4,
+    "course": "Physics",
+    "lesson": "The theory of relativity transformed theoretical physics and astronomy during the 20th century. When first published, relativity superseded a 200-year-old theory of mechanics created primarily by Isaac Newton.\n\nIn the field of physics, relativity improved the science of elementary particles and their fundamental interactions, along with ushering in the nuclear age. With relativity, cosmology and astrophysics predicted extraordinary astronomical phenomena such as neutron stars, black holes, and gravitational waves.",
+    "questions": [
+      {
+        "question": "Question 1",
+        "answer": true
+      },
+      {
+        "question": "Question 2",
+        "answer": true
+      },
+      {
+        "question": "Question 3",
+        "answer": true
+      },
+      {
+        "question": "Question 4",
+        "answer": true
+      },
+      {
+        "question": "Question 5",
+        "answer": true
+      }
+    ]
+  }

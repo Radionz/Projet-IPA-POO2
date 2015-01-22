@@ -5,7 +5,7 @@ import zuul.Woz;
 import zuul.entities.NPC;
 import zuul.entities.Player;
 import zuul.entities.items.Item;
-import zuul.studies.Course;
+import zuul.studies.Lesson;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -281,7 +281,7 @@ public class Room {
 	public boolean canUseDoCommand() { return actions.size() != 0; }
 
 	public void study(String answer) {
-		Woz.writeMsg(Game.getConst().get("not_in_examroom"));
+		Woz.writeMsg((String)Game.getConst().get("not_in_examroom"));
 	}
 
 	/**
@@ -308,15 +308,10 @@ public class Room {
 	 * @return true if player can leave, else it return false
 	 */
 	public boolean leave(Player player) {
-		// Player not in the room
-		for (Player p : playersInRoom) {
-			if (p.equals(player)) {
-				playersInRoom.remove(player);
-				return true;
-			}
-		}
-		return false;
-
+		if(playersInRoom.contains(player))
+			playersInRoom.remove(player);
+		
+		return true;
 	}
 
 	/**

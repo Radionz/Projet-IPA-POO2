@@ -1,7 +1,10 @@
 package zuul;
 
+import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 import zuul.GameManager.CommandToProcess;
 import zuul.entities.IA;
@@ -10,12 +13,12 @@ import zuul.entities.Player;
 import zuul.entities.items.Coffee;
 import zuul.entities.items.Item;
 import zuul.io.Command;
-import zuul.io.CommandWord;
 import zuul.io.IO;
 import zuul.io.Parser;
 import zuul.rooms.*;
+import zuul.studies.Exam;
 import zuul.studies.Lab;
-import zuul.studies.Course;
+import zuul.studies.Lesson;
 import zuul.studies.Question;
 
 /**
@@ -36,40 +39,43 @@ import zuul.studies.Question;
 
 public class Game {
 
+	private static boolean finished;
 	private static Player player;
 	private Parser parser;
-	private static HashMap<String,String> constantes;
+	private static HashMap<String, Object> constantes;
 	private ArrayList<Room> rooms;
-	private IAManager managerIA;
-	private GameManager gameManager;
-	
-	private static Question[] questions;
-	private static Course[] lessons;
+	private static IAManager managerIA;
+	private static GameManager gameManager;
+	private static ArrayList<Lesson> lessons;
+	private static ArrayList<Lab> labs;
+	private static ArrayList<Exam> exams;
 
 	/**
-	 * Create the game and initialise its internal map.
-	 * all questions and lessons arrays
-	 * and create a Player
+	 * Create the game and initialise its internal map. all questions and
+	 * lessons arrays and create a Player
 	 */
 	public Game(GameManager gm) {
-		try{
-			constantes = IO.getFromFile(IO.PossibleFiles.ENGLISH.getPath());
-		} catch(Exception e) {e.printStackTrace();}
-		questions = new Question[15];
-		lessons = new Course[10];		
-		init();
+		finished = false;
+		try {
+			constantes = IO.getFromFile(IO.getPossibleLanguagesPaths().get(0));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		lessons = new ArrayList<Lesson>();
+		labs = new ArrayList<Lab>();
+		exams = new ArrayList<Exam>();
 		rooms = new ArrayList<Room>();
-		createRooms();
-		// Set the player in the first room
-		player = new Player("", new Item(""), null);
+
 		parser = new Parser();
-		
+		createStudySupport();
+		createRooms();
+
 		managerIA = new IAManager(gm, rooms);
 		gameManager = gm;
 	}
 
 	/* Basic getters */
-	public static HashMap<String, String> getConst() {
+	public static HashMap<String, Object> getConst() {
 		return constantes;
 	}
 
@@ -77,49 +83,73 @@ public class Game {
 		return player;
 	}
 
-	public static Question[] getQuestions() {
-		return questions;
+	public static ArrayList<Exam> getExams() {
+		return exams;
 	}
 
-	public static Course[] getLessons() {
+	public static ArrayList<Lab> getLabs() {
+		return labs;
+	}
+
+	public static ArrayList<Lesson> getLessons() {
 		return lessons;
 	}
-	
-	public ArrayList<Room> getRooms(){ return rooms; }
 
+	public static Lesson getRadomLesson() {
+		Random random = new Random();
+		return lessons.get(random.nextInt(lessons.size()));
+	}
 
+	private void createStudySupport() {
+		for (String path : IO.getPossibleLessonsPaths()) {
+			lessons.add(new Lesson(path));
+		}
+		for (Lesson lesson : lessons) {
+			labs.add(new Lab(lesson, 3));
+		}
+		for (Lab lab : labs) {
+			exams.add(new Exam(lab));
+		}
+	}
 
-	/**
-	 * Create all the rooms and link their exits together.
-	 */
 	private void createRooms() {
 		Room outside, theater, pub, office, secretPassage;
 
 		// create the rooms
-		outside = new Room(constantes.get("outside_description"));
-		ClassRoom classroom = new ClassRoom( constantes.get("classroom_description"), false, 0);
-		ExamRoom examroom = new ExamRoom(constantes.get("examroom_description"));
-		LabRoom labroom = new LabRoom(constantes.get("labroom_description"));
-		Library library = new Library(constantes.get("library_description"));
-		LunchRoom lunchroom = new LunchRoom(constantes.get("lunchroom_description"));
-		Corridor corridor = new Corridor(constantes.get("corridor_description"));
-		Corridor corridor2 = new Corridor(constantes.get("corridor_description"));
-		theater = new Room(constantes.get("theater_description"));
-		pub = new Room(constantes.get("pub_description"));
-		office = new Room(constantes.get("office_description"));
-		secretPassage = new SecretPassage(constantes.get("secret_passage_description"));
+		outside = new Room(
+				(String) (String) constantes.get("outside_description"));
+		ClassRoom classroom = new ClassRoom(
+				(String) constantes.get("classroom_description"));
+		ExamRoom examroom = new ExamRoom(
+				(String) constantes.get("examroom_description"));
+		LabRoom labroom = new LabRoom(
+				(String) constantes.get("labroom_description"));
+		Library library = new Library(
+				(String) constantes.get("library_description"));
+		LunchRoom lunchroom = new LunchRoom(
+				(String) constantes.get("lunchroom_description"));
+		Corridor corridor = new Corridor(
+				(String) constantes.get("corridor_description"));
+		Corridor corridor2 = new Corridor(
+				(String) constantes.get("corridor_description"));
+		theater = new Room((String) constantes.get("theater_description"));
+		pub = new Room((String) constantes.get("pub_description"));
+		office = new Room((String) constantes.get("office_description"));
+		secretPassage = new SecretPassage(
+				(String) constantes.get("secret_passage_description"));
 
 		// initialise rooms exits
 		outside.setExit(Room.Exits.EAST, library);
 		outside.setExit(Room.Exits.SOUTH, corridor);
 		outside.setExit(Room.Exits.WEST, lunchroom);
-		outside.addItem(new Item(constantes.get("chocolate_bar_description"),1));
-		outside.addUsableItem(new Item(constantes.get("chocolate_bar_description"),1));
+		outside.addItem(new Item((String) constantes
+				.get("chocolate_bar_description"), 1));
+		outside.addUsableItem(new Item((String) constantes
+				.get("chocolate_bar_description"), 1));
 		outside.addItem(new Coffee());
-		
+
 		pub.setExit(Room.Exits.WEST, secretPassage);
 		secretPassage.setExit(Room.Exits.WEST, theater);
-
 
 		lunchroom.setExit(Room.Exits.WEST, pub);
 		library.setExit(Room.Exits.EAST, theater);
@@ -137,7 +167,7 @@ public class Game {
 		rooms.add(pub);
 		rooms.add(office);
 		rooms.add(secretPassage);
-		rooms.add(labroom);		
+		rooms.add(labroom);
 		rooms.add(classroom);
 		rooms.add(examroom);
 		rooms.add(library);
@@ -146,77 +176,38 @@ public class Game {
 		rooms.add(corridor2);
 	}
 
-
-	/**
-	 * init questions arrays
-	 */
-	private void init() {
-
-		for (int i = 0; i < 15; i++) {
-			questions[i] = new Question(i + 1);
-		}
-		for (int i = 0; i < 5; i++) {
-			lessons[i] = new Course(true, i+1);
-		}
-		for (int i = 0; i < 5; i++) {
-			lessons[i+5] = new Course(false, i+1);
-		}
-	}
-
-
 	/**
 	 * Main play routine. Loops until end of play.
 	 */
-	public void play() {		
-		
-		String playerName = getPlayerName();
+	public void play() {
+		player = new Player(getPlayerName(), null);
 		printWelcome();
-		
+		player.enter(rooms.get(0));
 		new Thread(managerIA).start();
 		// Enter the main command loop. Here we repeatedly read commands and
 		// execute them until the game is over.
 
 		boolean finished = false;
-		while (!finished) {			
+		while (!finished) {
 			Command command = parser.getCommand();
-			finished = !gameManager.addCommandToProcess(player, command);	
+			finished = !gameManager.addCommandToProcess(player, command);
 		}
-		Woz.writeMsg(constantes.get("close_game"));
-	}	
-	
-	public void process(Command c)
-	{
+		Woz.writeMsg((boolean) constantes.get("close_game"));
+	}
+
+	public void process(Command c) {
 		gameManager.addCommandToProcess(player, c);
 	}
 
-
-	/**
-	 * Print the beginning of the welcome message and allows the player to type his name.
-	 * @return String of player's name.
-	 */
 	private String getPlayerName() {
-		Woz.writeMsg(constantes.get("welcome"));
-		Woz.writeMsg(constantes.get("invite_enter_name"));
+		System.out.println((String) constantes.get("welcome"));
+		System.out.println((String) constantes.get("invite_enter_name"));
 		return parser.getPlayerName();
 	}
 
-	/**
-	 * Print out the opening message for the player.
-	 */
 	private void printWelcome() {
-		Woz.writeMsg(this.player.getName() + ", " + constantes.get("intro"));
-		Woz.writeMsg(constantes.get("need_help") + " : " + CommandWord.HELP);
-		Woz.writeMsg();
-		// Add the player to the first room -> print room description
-		player.enter(rooms.get(0));
+		Woz.writeMsg(this.player.getName() + ", "
+				+ (String) constantes.get("intro"));
 	}
 
-	/**
-	 * Given a command, process (that is: execute) the command.
-	 * 
-	 * @param command
-	 *            The command to be processed.
-	 * @return true If the command ends the game, false otherwise.
-	 */
-	
 }

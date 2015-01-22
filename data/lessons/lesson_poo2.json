@@ -1,0 +1,27 @@
+{
+	"id": 6,
+    "course": "POO",
+    "lesson": "Today let me introduce you inheritance. You can declare a class B which inherit another class A. you write it this way 'A a= new B()'. But this 'B = new A()' is wrong. You have to add the instruction 'super();' in the constructor of B for the code to compile.  This is it for this POO lesson, see you for another one.",
+    "questions": [
+      {
+        "question": "Question 1",
+        "answer": true
+      },
+      {
+        "question": "Question 2",
+        "answer": true
+      },
+      {
+        "question": "Question 3",
+        "answer": true
+      },
+      {
+        "question": "Question 4",
+        "answer": true
+      },
+      {
+        "question": "Question 5",
+        "answer": true
+      }
+    ]
+  }

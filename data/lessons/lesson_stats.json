@@ -1,0 +1,27 @@
+{
+	"id": 10,
+    "course": "Statistics",
+    "lesson": "Mathematical statistics is the application of mathematics to statistics, which was originally conceived as the science of the state — the collection and analysis of facts about a country: its economy, land, military, population, and so forth. Mathematical techniques used for this include mathematical analysis, linear algebra, stochastic analysis, differential equations, and measure-theoretic probability theory",
+    "questions": [
+      {
+        "question": "Question 1",
+        "answer": true
+      },
+      {
+        "question": "Question 2",
+        "answer": true
+      },
+      {
+        "question": "Question 3",
+        "answer": true
+      },
+      {
+        "question": "Question 4",
+        "answer": true
+      },
+      {
+        "question": "Question 5",
+        "answer": true
+      }
+    ]
+ }

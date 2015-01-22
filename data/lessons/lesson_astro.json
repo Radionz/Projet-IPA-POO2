@@ -1,0 +1,27 @@
+{
+	"id": 1,
+    "course": "Astrophysics",
+    "lesson": "The basic notion of an intra-universe wormhole is that it is a compact region of spacetime whose boundary is topologically trivial, but whose interior is not simply connected. Formalizing this idea leads to definitions such as the following, taken from Matt Visser's Lorentzian Wormholes.\n\n    If a Minkowski spacetime contains a compact region Ω, and if the topology of Ω is of the form Ω ~ R x Σ, where Σ is a three-manifold of the nontrivial topology, whose boundary has topology of the form ∂Σ ~ S2, and if, furthermore, the hypersurfaces Σ are all spacelike, then the region Ω contains a quasipermanent intra-universe wormhole.",
+    "questions": [
+      {
+        "question": "Question 1",
+        "answer": true
+      },
+      {
+        "question": "Question 2",
+        "answer": true
+      },
+      {
+        "question": "Question 3",
+        "answer": true
+      },
+      {
+        "question": "Question 4",
+        "answer": true
+      },
+      {
+        "question": "Question 5",
+        "answer": true
+      }
+    ]
+  }

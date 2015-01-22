@@ -1,0 +1,27 @@
+{
+	"id": 9,
+    "course": "POO",
+    "lesson": "Today we will learn more about inheritance!. We learned that a class B can inherit from another class A.. By doing this an infinite number of class can inherit of class A.. But be careful, you can't inherit from two different classes !. Don't forget to add the instruction 'super()' to the constructor of the class.. This it if for this POO lesson.",
+    "questions": [
+      {
+        "question": "Question 1",
+        "answer": true
+      },
+      {
+        "question": "Question 2",
+        "answer": true
+      },
+      {
+        "question": "Question 3",
+        "answer": true
+      },
+      {
+        "question": "Question 4",
+        "answer": true
+      },
+      {
+        "question": "Question 5",
+        "answer": true
+      }
+    ]
+  }

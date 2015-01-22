@@ -1,25 +1,37 @@
 package zuul;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.concurrent.locks.*;
 
+import zuul.entities.NPC;
 import zuul.entities.Player;
 import zuul.io.Command;
-import zuul.io.CommandWord;
 import zuul.io.Parser;
 import zuul.rooms.Room;
 
-public class GameManager {
+public class GameManager implements Actions{
 	private ArrayList<CommandToProcess> todo;
 	private boolean running;
 	public Lock lock;
 	private Parser parser;
+	
+	private static ArrayList<String> actions;
 
 	public GameManager() {
 		todo = new ArrayList<CommandToProcess>();
 		lock = new ReentrantLock();
 		parser = new Parser();
 		running = true;
+		
+		
+		actions = new ArrayList<String>();
+		for (Method method : Actions.class.getDeclaredMethods()) {
+			actions.add(method.getName());
+			
+			
+		}
+		
 		new Thread(new Processor()).start();
 	}
 
@@ -39,7 +51,7 @@ public class GameManager {
 
 	public boolean addCommandToProcess(Player p, Command c) {
 		boolean quit = true;
-		if(c.getCommandWord() == CommandWord.QUIT)
+		if(c.getCommandWord().equals("quit"))
 		{
 			quit = true;
 			lock.lock();
@@ -60,58 +72,43 @@ public class GameManager {
 		return quit;
 	}
 
-	private void processCommand(Command command, Player p) {
+	
+	private boolean processCommand(Command command, Player p) {
+		String commandWord = command.getCommandWord();
+		String paramWord = command.getSecondWord();
+		
+		
+		if (actions.contains(commandWord) && !commandWord.equals("unknown")) {
+			Method method = null;
+			try {
+				method = Actions.class.getDeclaredMethod(commandWord,
+						String.class, Player.class);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 
-		CommandWord commandWord = command.getCommandWord();
-
-		switch (commandWord) {
-		case UNKNOWN:
-			Woz.writeMsg(Game.getConst().get("dont_understand"));
-			break;
-
-		case HELP:
-			printHelp();
-			break;
-
-		case GO:
-			goRoom(command, p);
-			break;
-
-		case DO:
-			doSomething(command, p);
-			break;
-
-		case DROP:
-			dropItem(command, p);
-			break;
-
-		case PICK:
-			pickItem(command, p);
-			break;
-
-		case USE:
-			useItem(command, p);
-			break;
-
-		case INVENTORY:
-			printInventory(command, p);
-			break;
-
-		case ANSWER:
-			answerQuestion(command, p);
-			break;
-
-		case QUIT:
-			lock.lock();
-			try{
-				running = quit(command, p);
-			}finally{
-				lock.unlock();
-			}			
-			break;
-
-		}
+			try {
+				return (boolean) method.invoke(this, paramWord, p);
+			} catch (Exception e) {
+				System.err.println("Action :" + commandWord + " " + paramWord);
+				e.printStackTrace();
+			}
+		} else
+			System.err.println("I don't know what you mean." + "\n"
+					+ "Availbe actions : " + stringAvaibleActions());
+		return false;
 	}
+
+	private String stringAvaibleActions() {
+		String result = "";
+		;
+		for (String action : actions) {
+			result += action + ", ";
+		}
+		return (result.length() > 2) ? result.substring(0, result.length() - 2)
+				: result;
+	}
+
 
 	// implementations of user commands:
 	private void printInventory(Command command, Player p) {
@@ -124,34 +121,43 @@ public class GameManager {
 	 * message and a list of the command words.
 	 */
 	private void printHelp() {
-		Woz.writeMsg(Game.getConst().get("help_intro"));
-		Woz.writeMsg(Game.getConst().get("your_command_word"));
-		parser.showCommands();
+		Woz.writeMsg((String)Game.getConst().get("help_intro"));
+		Woz.writeMsg((String)Game.getConst().get("your_command_word"));
+		
+		
+		System.err.println("TODO : show command");//parser.showCommands();
 	}
 
 	/**
 	 * Try to go in one direction. If there is an exit, enter the new rooms,
 	 * otherwise print an error message.
 	 */
-	private void goRoom(Command command, Player p) {
-		if (!command.hasSecondWord()) {
-			// if there is no second word, we don't know where to go...
-			Woz.writeMsg(Game.getConst().get("go_where"));
-			Woz.writeMsg(p.getCurrentRoom().getExitString());
-			return;
+	public boolean go(String command, Player p) {		
+		if (command == null) {
+			System.out.println((String) Game.getConst().get("go_where"));
+			System.out.println(p.getCurrentRoom().getExitString());
+			return false;
 		}
-		String direction = command.getSecondWord();
-
+		
 		// Try to leave current rooms.
-		Room nextRoom = p.getCurrentRoom().getExit(direction);
-
+		System.out.println(p.getCurrentRoom().getExitString());
+		Room nextRoom = p.getCurrentRoom().getExit(command);
+		System.out.println("Cmd=" + command);
+		
+		
 		if (nextRoom == null) {
-			Woz.writeMsg(p.getName() + ", "
-					+ Game.getConst().get("no_door"));
-		} else if (p.getCurrentRoom().isHidden()
-				|| (nextRoom.canEnter(p) && p.leaveRoom())) {
-			p.enter(nextRoom);
+			System.out.println((String) Game.getConst().get("no_door"));
+		} else if (nextRoom.canEnter(p)) {
+			System.out.println("Can enter");
+			if(p.getCurrentRoom().leave(p))
+			{
+				p.enter(nextRoom);
+				return true;
+			}
+			
 		}
+		
+		return false;
 	}
 
 	/**
@@ -159,25 +165,23 @@ public class GameManager {
 	 * 
 	 * @param command
 	 */
-	private void dropItem(Command command, Player p) {
-		if (!command.hasSecondWord()) {
+	public boolean dropItem(String command, Player p) {
+		if (command == null) {
 			// if there is no second word, we don't know where to go...
-			Woz.writeMsg(Game.getConst().get("what_drop"));
-			return;
+			System.out.println(Game.getConst().get("what_drop"));
+			return false;
 		}
-
-		String itemName = command.getSecondWord();
-
 		// Try to drop item in the current rooms.
-		if (p.dropItem(p.getCurrentRoom(), itemName)) {
-			System.out
-					.println(Game.getConst().get("ok_drop") + ": " + itemName);
+		if (p.dropItem(p.getCurrentRoom(), command)) {
+			System.out.println(Game.getConst().get("ok_drop") + ": " + command);
 		} else {
-			Woz.writeMsg(Game.getConst().get("you_not_carry") + ": "
-					+ itemName);
-			Woz.writeMsg(Game.getConst().get("you_carry") + ": "
+			System.out.println(Game.getConst().get("you_not_carry") + ": "
+					+ command);
+			System.out.println(Game.getConst().get("you_carry") + ": "
 					+ p.getInventoryContent());
 		}
+		
+		return true;
 	}
 
 	/**
@@ -186,25 +190,26 @@ public class GameManager {
 	 * @param command
 	 *            item name
 	 */
-	private void pickItem(Command command, Player p) {
-		if (!command.hasSecondWord()) {
+	public boolean pickItem(String command, Player p) {
+		Room r = p.getCurrentRoom();
+		
+		if (command == null) {
 			// if there is no second word, we don't know where to go...
-			Woz.writeMsg(Game.getConst().get("what_pick"));
-			Woz.writeMsg(p.getCurrentRoom().getItemString());
-			return;
+			System.out.println(Game.getConst().get("what_pick"));
+			System.out.println(r.getItemString());
+			return false;
 		}
-
-		String itemName = command.getSecondWord();
 
 		// Try to pick item in the current rooms.
-		if (p.getCurrentRoom().hasItem(itemName)) {
-			p.pickUp(p.getCurrentRoom(), itemName);
-			System.out
-					.println(Game.getConst().get("ok_pick") + ": " + itemName);
+		if (r.hasItem(command)) {
+			p.pickUp(r, command);
+			System.out.println(Game.getConst().get("ok_pick") + ": " + command);
 		} else {
-			Woz.writeMsg(Game.getConst().get("no") + itemName);
-			Woz.writeMsg(p.getCurrentRoom().getItemString());
+			System.out.println(Game.getConst().get("no") + command);
+			System.out.println(r.getItemString());
 		}
+		
+		return true;
 	}
 
 	/**
@@ -213,21 +218,21 @@ public class GameManager {
 	 * @param command
 	 *            item name
 	 */
-	private void useItem(Command command, Player p) {
-		if (!command.hasSecondWord()) {
+	public boolean use(String command, Player p) {
+		if (command == null) {
 			// if there is no second word, we don't know where to go...
-			Woz.writeMsg(Game.getConst().get("what_use"));
-			return;
+			System.out.println(Game.getConst().get("what_use"));
+			return false;
 		}
-
-		String itemName = command.getSecondWord();
 
 		// Try to use item in the current rooms.
-		if (p.getCurrentRoom().canUseItem(itemName)) {
-			Woz.writeMsg(p.use(itemName));
+		if (p.getCurrentRoom().canUseItem(command)) {
+			System.out.println(p.use(command));
 		} else {
-			Woz.writeMsg(Game.getConst().get("no_use_item_here"));
+			System.out.println(Game.getConst().get("no_use_item_here"));
 		}
+		
+		return false;
 	}
 
 	/**
@@ -236,18 +241,15 @@ public class GameManager {
 	 * @param command
 	 *            full command to parse
 	 */
-	private void doSomething(Command command, Player p) {
-		if (!command.hasSecondWord()) {
+	
+	public boolean action(String command, Player p) {
+		if (command == null) {
 			// if there is no second word, we don't know where to go...
-			Woz.writeMsg(Game.getConst().get("what_do"));
-			Woz.writeMsg(p.getCurrentRoom().getActionString());
-			return;
+			System.out.println((String) Game.getConst().get("what_do"));
+			System.out.println(p.getCurrentRoom().getActionString());
+			return false;
 		}
-
-		String mehtod = command.getSecondWord();
-
-		// Try to use item in the current rooms.
-		Woz.writeMsg(p.getCurrentRoom().doSomething(p, mehtod));
+		return addCommandToProcess(p, new Command("action", command));
 	}
 
 	/**
@@ -260,7 +262,7 @@ public class GameManager {
 	private void answerQuestion(Command command, Player p) {
 		if (!command.hasSecondWord()) {
 			// if there is no second word, we don't know...
-			Woz.writeMsg(Game.getConst().get("what_answer"));
+			Woz.writeMsg((String)Game.getConst().get("what_answer"));
 			return;
 		}
 
@@ -274,13 +276,9 @@ public class GameManager {
 	 * 
 	 * @return true, if this command quits the game, false otherwise.
 	 */
-	private boolean quit(Command command, Player p) {
-		if (command.hasSecondWord()) {
-			Woz.writeMsg(Game.getConst().get("what_quit"));
-			return false;
-		} else {
-			return true; // signal that we want to quit
-		}
+	public boolean quit(String command, Player p) {
+		//finished = true;
+		return true;
 	}
 
 	public class CommandToProcess {
@@ -319,16 +317,12 @@ public class GameManager {
 				
 				try {
 					//System.out.println("FOO");
-					Thread.sleep(1000);
+					Thread.sleep(100);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}	
-			}
-					
-			
+			}			
 		}
-
 	}
-
 }
