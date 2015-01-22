@@ -44,8 +44,9 @@ public class Corridor extends Room{
     		return player.getName() + " " + (light ? Game.getConst().get("IA_light_on") 
     				: Game.getConst().get("IA_light_off"));
     	else
-    		return Game.getConst().get("self") +
-    				(light ? Game.getConst().get("light_on") : Game.getConst().get("light_off"));
+    		return (String)(Game.getConst().get("self") +
+    				(light ? (String)Game.getConst().get("light_on") 
+    						: (String)Game.getConst().get("light_off")));
     } 
 
 

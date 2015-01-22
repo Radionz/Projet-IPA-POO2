@@ -25,7 +25,7 @@ public class Library extends Room{
     	if(player instanceof NPC)
     		return player.getName() + " " + Game.getConst().get("IA_read_book");
     	else
-    		return Game.getConst().get("player_read_book");
+    		return (String)Game.getConst().get("player_read_book");
     }
 
     public boolean checkForschedule() {
