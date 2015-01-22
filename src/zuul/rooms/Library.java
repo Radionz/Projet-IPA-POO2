@@ -31,7 +31,7 @@ public class Library extends Room{
     public boolean checkForschedule() {
         Random random = new Random();
         int hour = random.nextInt(24);
-        return hour==1;
+        return (hour >=8 || hour <= 17);
     }
     
     /**

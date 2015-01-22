@@ -88,8 +88,8 @@ public class IAManager implements Runnable{
 		boolean canDo = currentRoom.canUseDoCommand();
 		//boolean canAnwser = currentRoom.canUseAnswerCommand();
 		
-//		if(canDo && Math.random() < 0.3)
-//			return generateDoCommand(ia);
+		if((canDo && Math.random() < 0.5))
+			return generateDoCommand(ia);
 		
 		return generateValidGoCommand(ia);		
 	}
@@ -103,8 +103,8 @@ public class IAManager implements Runnable{
 	}
 	
 	public Command generateValidGoCommand(IA ia)
-	{
-		return new Command("go", ia.getCurrentRoom().getRandomExitDirection());
+	{		
+		return new Command("go", ia.getCurrentRoom().getRandomDirection());
 	}
 	
 	public boolean runIA()
@@ -115,7 +115,7 @@ public class IAManager implements Runnable{
 			if(!manager.addCommandToProcess(ia, toProcess.get(ia)))
 				return false;
 			
-			try {	Thread.sleep(100);	
+			try {	Thread.sleep(1000);	
 			} catch (InterruptedException e) {	
 				e.printStackTrace();	
 			}
@@ -130,13 +130,7 @@ public class IAManager implements Runnable{
 		
 		initIA(rooms.get(0));
 		
-		while((running = runIA()))
-		{
-//			//System.out.println("YOLO");
-//			try {	Thread.sleep(100);	
-//			} catch (InterruptedException e) {	
-//				e.printStackTrace();	
-//			}
-		}
+		while((running = runIA()));
+
 	}
 }

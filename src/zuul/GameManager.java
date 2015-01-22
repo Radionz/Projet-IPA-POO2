@@ -27,8 +27,7 @@ public class GameManager implements Actions{
 		
 		actions = new ArrayList<String>();
 		for (Method method : Actions.class.getDeclaredMethods()) {
-			actions.add(method.getName());
-			
+			actions.add(method.getName());			
 			
 		}
 		
@@ -37,11 +36,17 @@ public class GameManager implements Actions{
 
 	private void executeOne() {
 		CommandToProcess action = null;
+		boolean ia;
 		lock.lock();
 		try {
 			if (todo.size() > 0) {
 				action = todo.remove(0);
+				ia = (action.player instanceof NPC);
+				if(!ia)	
+					Woz.writeMsg("####");
 				processCommand(action.command, action.player);
+				if(!ia)	
+					Woz.writeMsg("####");
 			}
 		} finally {
 			lock.unlock();
@@ -134,21 +139,18 @@ public class GameManager implements Actions{
 	 */
 	public boolean go(String command, Player p) {		
 		if (command == null) {
-			System.out.println((String) Game.getConst().get("go_where"));
-			System.out.println(p.getCurrentRoom().getExitString());
+			Woz.writeMsg((String) Game.getConst().get("go_where"));
+			Woz.writeMsg(p.getCurrentRoom().getExitString());
 			return false;
 		}
-		
-		// Try to leave current rooms.
-		System.out.println(p.getCurrentRoom().getExitString());
+
 		Room nextRoom = p.getCurrentRoom().getExit(command);
-		System.out.println("Cmd=" + command);
 		
+
 		
 		if (nextRoom == null) {
-			System.out.println((String) Game.getConst().get("no_door"));
+			Woz.writeMsg((String) Game.getConst().get("no_door"));
 		} else if (nextRoom.canEnter(p)) {
-			System.out.println("Can enter");
 			if(p.getCurrentRoom().leave(p))
 			{
 				p.enter(nextRoom);
@@ -168,16 +170,16 @@ public class GameManager implements Actions{
 	public boolean dropItem(String command, Player p) {
 		if (command == null) {
 			// if there is no second word, we don't know where to go...
-			System.out.println(Game.getConst().get("what_drop"));
+			Woz.writeMsg((String)Game.getConst().get("what_drop"));
 			return false;
 		}
 		// Try to drop item in the current rooms.
 		if (p.dropItem(p.getCurrentRoom(), command)) {
-			System.out.println(Game.getConst().get("ok_drop") + ": " + command);
+			Woz.writeMsg(Game.getConst().get("ok_drop") + ": " + command);
 		} else {
-			System.out.println(Game.getConst().get("you_not_carry") + ": "
+			Woz.writeMsg(Game.getConst().get("you_not_carry") + ": "
 					+ command);
-			System.out.println(Game.getConst().get("you_carry") + ": "
+			Woz.writeMsg(Game.getConst().get("you_carry") + ": "
 					+ p.getInventoryContent());
 		}
 		
@@ -195,18 +197,18 @@ public class GameManager implements Actions{
 		
 		if (command == null) {
 			// if there is no second word, we don't know where to go...
-			System.out.println(Game.getConst().get("what_pick"));
-			System.out.println(r.getItemString());
+			Woz.writeMsg((String)Game.getConst().get("what_pick"));
+			Woz.writeMsg(r.getItemString());
 			return false;
 		}
 
 		// Try to pick item in the current rooms.
 		if (r.hasItem(command)) {
 			p.pickUp(r, command);
-			System.out.println(Game.getConst().get("ok_pick") + ": " + command);
+			Woz.writeMsg(Game.getConst().get("ok_pick") + ": " + command);
 		} else {
-			System.out.println(Game.getConst().get("no") + command);
-			System.out.println(r.getItemString());
+			Woz.writeMsg(Game.getConst().get("no") + command);
+			Woz.writeMsg(r.getItemString());
 		}
 		
 		return true;
@@ -221,15 +223,15 @@ public class GameManager implements Actions{
 	public boolean use(String command, Player p) {
 		if (command == null) {
 			// if there is no second word, we don't know where to go...
-			System.out.println(Game.getConst().get("what_use"));
+			Woz.writeMsg((String)Game.getConst().get("what_use"));
 			return false;
 		}
 
 		// Try to use item in the current rooms.
 		if (p.getCurrentRoom().canUseItem(command)) {
-			System.out.println(p.use(command));
+			Woz.writeMsg(p.use(command));
 		} else {
-			System.out.println(Game.getConst().get("no_use_item_here"));
+			Woz.writeMsg((String)Game.getConst().get("no_use_item_here"));
 		}
 		
 		return false;
@@ -245,8 +247,8 @@ public class GameManager implements Actions{
 	public boolean action(String command, Player p) {
 		if (command == null) {
 			// if there is no second word, we don't know where to go...
-			System.out.println((String) Game.getConst().get("what_do"));
-			System.out.println(p.getCurrentRoom().getActionString());
+			Woz.writeMsg((String) Game.getConst().get("what_do"));
+			Woz.writeMsg(p.getCurrentRoom().getActionString());
 			return false;
 		}
 		return addCommandToProcess(p, new Command("action", command));
@@ -316,7 +318,6 @@ public class GameManager implements Actions{
 				}
 				
 				try {
-					//System.out.println("FOO");
 					Thread.sleep(100);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block

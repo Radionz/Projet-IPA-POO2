@@ -162,7 +162,16 @@ public class Room {
 		// return exits.get(direction);
 		return exits.get(Exits.getAnExit(direction));
 	}
-
+	
+	
+	public String getRandomDirection()
+	{
+		ArrayList<Exits> disp = new ArrayList<Exits>();
+		disp.addAll(exits.keySet());
+		return disp.get(new Random().nextInt(disp.size())).getValue();		
+	}
+	
+	
 	/**
 	 * Return the list of all items present in the current room
 	 * 
@@ -313,6 +322,7 @@ public class Room {
 		
 		return true;
 	}
+	
 
 	/**
 	 * @author Adrien Boucher Tells if the room is visible (eg: exits are shown

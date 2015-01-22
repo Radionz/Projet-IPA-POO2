@@ -180,7 +180,7 @@ public class Game {
 	 * Main play routine. Loops until end of play.
 	 */
 	public void play() {
-		player = new Player(getPlayerName(), null);
+		player = new Player(Woz.getName(), null);
 		printWelcome();
 		player.enter(rooms.get(0));
 		new Thread(managerIA).start();
@@ -197,12 +197,6 @@ public class Game {
 
 	public void process(Command c) {
 		gameManager.addCommandToProcess(player, c);
-	}
-
-	private String getPlayerName() {
-		System.out.println((String) constantes.get("welcome"));
-		System.out.println((String) constantes.get("invite_enter_name"));
-		return parser.getPlayerName();
 	}
 
 	private void printWelcome() {
