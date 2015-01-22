@@ -60,7 +60,7 @@ public class ClassRoom extends Room {
 	 * 
 	 * @return String of the lesson
 	 */
-	public String nextSentence() {
+	public String nextSentence(Player player) {
 		return displaySentences();
 	}
 

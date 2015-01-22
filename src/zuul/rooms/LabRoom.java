@@ -3,7 +3,7 @@ package zuul.rooms;
 import java.util.ArrayList;
 import zuul.Game;
 import zuul.Woz;
-import zuul.entities.Player;
+import zuul.entities.*;
 import zuul.studies.Lab;
 
 /**
@@ -28,13 +28,15 @@ public class LabRoom extends Room {
 	 * @return the question asked
 	 */
 	public String lab(Player player) {
-		int pooLevel = player.getCurrentPOOLevel();
-		if (player.getKnowledges().size() >= pooLevel) {
+		//int pooLevel = player.getCurrentPOOLevel();
+		if (!(player instanceof NPC)) {
 			actions.remove("lab");
 			this.labInProcess = true;
 			return lab.askQuestion();
 		}
-		return "You can't do this lab without the proper lesson !";
+		else
+			return player.getName() + " did the lab .";
+		//return "You can't do this lab without the proper lesson !";
 	}
 
 	/**

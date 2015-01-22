@@ -1,5 +1,6 @@
 package zuul.io;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -59,6 +60,27 @@ public class Parser {
         }
 
         return new Command(commands.getCommandWord(word1), word2);
+    }
+    
+    /**
+     * @return The next command from the user.
+     */
+    public Command getCommand(String input) {
+     
+        String word1 = null;
+        String word2 = "";
+        
+        String[] cmd = input.split(" ");
+        
+        if(!cmd[0].isEmpty())        	
+        {
+        	return new Command(commands.getCommandWord(cmd[0]), cmd[1]);
+        }
+        
+        throw new IllegalArgumentException();
+        
+
+        
     }
 
     /**

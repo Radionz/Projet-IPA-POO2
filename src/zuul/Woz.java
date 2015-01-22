@@ -31,11 +31,14 @@ public class Woz {
 	}
 	
     public static void main(String[] args){
-    	w = new Window();    	
-    	w.setVisible(true);
     	
     	GameManager gm = new GameManager();    	
     	Game game = new Game(gm);
+    	
+    	w = new Window(game);    	
+    	w.setVisible(true);
+    	
+    	
 		game.play();
 		
 		w.dispose();

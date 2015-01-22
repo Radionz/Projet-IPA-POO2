@@ -183,6 +183,11 @@ public class Game {
 		}
 		Woz.writeMsg(constantes.get("close_game"));
 	}	
+	
+	public void process(Command c)
+	{
+		gameManager.addCommandToProcess(player, c);
+	}
 
 
 	/**
@@ -190,7 +195,6 @@ public class Game {
 	 * @return String of player's name.
 	 */
 	private String getPlayerName() {
-		Woz.writeMsg();
 		Woz.writeMsg(constantes.get("welcome"));
 		Woz.writeMsg(constantes.get("invite_enter_name"));
 		return parser.getPlayerName();

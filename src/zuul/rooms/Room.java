@@ -256,6 +256,7 @@ public class Room {
 			try {
 				return (String) method.invoke(this, player);
 			} catch (Exception e) {
+				System.err.println("Action erreur :" + action);
 				e.printStackTrace();
 			}
 		} else {
