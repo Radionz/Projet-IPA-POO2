@@ -1,27 +1,27 @@
 {
-	"id": 3,
+	"id": 10,
     "course": "Cooking",
     "lesson": "Heat oven to 180C/160C fan/gas 4 and grease 3 x 20cm sandwich tins, lining the bases with baking parchment and greasing the parchment too.\n    Beat the butter and sugar in a large bowl with an electric whisk until light and fluffy. Add the vanilla extract and the egg whites, a little at a time, beating until fully combined before adding more. Mix together the flour, cornflour and baking powder. Add the dry ingredients in 3 additions, alternating with the buttermilk. Divide the batter between the tins and level the tops.\n    Bake for 25-30 mins or until a skewer inserted into the middle comes out clean. Allow the cakes to cool in the tins for 10 mins, then turn out onto a wire rack, peeling off the parchment. Cool completely.\n    To make the buttercream, put the egg whites and sugar in a big bowl (the bowl of your tabletop mixer, if you have one) with the vanilla seeds and set over a pan of gently simmering water. Lightly whisk until the sugar has fully dissolved – you can test this by dipping two fingers into the bowl and rubbing them together; if you can’t feel any grains of sugar, the mixture is ready. Remove the bowl from the heat and keep whisking until a thick meringue has formed. Continue whisking until the meringue has cooled to room temperature, then slowly add in the butter, 1 tbsp at a time. By the time all the butter has been incorporated, the mixture should have transformed into a silky-smooth buttercream. If it hasn’t, continue to whisk until it does. If it still refuses to thicken, it may be the mixture is still too warm, so chill for 10 mins, then continue whisking. Add the vanilla extract and mix to combine.\n    To assemble the cake, place a sponge on a cake board or serving plate and top with a thin layer of buttercream. Repeat with the remaining cake layers and finish by spreading the remaining buttercream over the top and sides of the cake (see below). To get a smooth finish, use the edge of a palette knife, and drag carefully around the sides of the cake, smoothing out the buttercream. To decorate the cake, press the sides of it with the edible polka dot sprinkles creating a full border at the bottom with less and less the further up the cake you go. Best served within 2 days of baking, but the cake will keep for up to 4 days.\n This is it for this lesson for how to bake a cake.",
     "questions": [
       {
-        "question": "Question 1",
+        "question": "Heat over to 160C/140C?",
+        "answer": false
+      },
+      {
+        "question": "Allow the cakes to cool in the tins for 10mins?",
         "answer": true
       },
       {
-        "question": "Question 2",
-        "answer": true
+        "question": "To make the buttercream, put the egg whites and the chocolate in a big bowl?",
+        "answer": false
       },
       {
-        "question": "Question 3",
-        "answer": true
+        "question": "If the mixture refuses to thicken after much whisking, it may be that it is too cold",
+        "answer": false
       },
       {
-        "question": "Question 4",
-        "answer": true
-      },
-      {
-        "question": "Question 5",
-        "answer": true
+        "question": "The cake won't keep up to 4 days",
+        "answer": false
       }
     ]
   }

@@ -1,18 +1,18 @@
 {
-	"id": 8,
+	"id": 3,
     "course": "POO",
     "lesson": "Today we will learn about some properties of instance. Some class can be not instanciate. if you set the constructor as 'private' of if you declare the class as 'abstract' you won't be able to instanciate an object for this class. And just before you leave, remember that, an interface can be the static type for an object. This is it for this POO lesson, see you for another one.",
     "questions": [
       {
-        "question": "Question 1",
+        "question": "Can A class 'public class Toto' can be instanciated ?",
         "answer": true
       },
       {
-        "question": "Question 2",
-        "answer": true
+        "question": "Can a class 'public abstract class Toto' be instanciate ?",
+        "answer": false
       },
       {
-        "question": "Question 3",
+        "question": "An interface can be a static type ?",
         "answer": true
       },
       {

@@ -1,26 +1,26 @@
 {
-	"id": 7,
+	"id": 4,
     "course": "POO",
     "lesson": "Today we will learn about static type. Basically, we call 'static type' the type of the declaration. if you declare 'A a= new C()', the 'static type' of a is A.  This is it for this short POO lesson about static type, see you for another one.",
     "questions": [
       {
-        "question": "Question 1",
+        "question": "In 'private String s = new String(\"toto\");', String is the dynamic type of s ?",
         "answer": true
       },
       {
-        "question": "Question 2",
+        "question": "In 'private List l = new ArrayList<String>()', String is the dynamic type of s ?",
+        "answer": false
+      },
+      {
+        "question": "In 'private List l = new ArrayList<String>()', ArrayList is the dynamic type of s ?",
+        "answer": false
+      },
+      {
+        "question": "'static type' is a type of declaration.",
         "answer": true
       },
       {
-        "question": "Question 3",
-        "answer": true
-      },
-      {
-        "question": "Question 4",
-        "answer": true
-      },
-      {
-        "question": "Question 5",
+        "question": "if you declare 'A a= new C()', the 'static type' of a is A",
         "answer": true
       }
     ]

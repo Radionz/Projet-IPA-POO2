@@ -1,26 +1,26 @@
 {
-	"id": 1,
+	"id": 12,
     "course": "Astrophysics",
-    "lesson": "The basic notion of an intra-universe wormhole is that it is a compact region of spacetime whose boundary is topologically trivial, but whose interior is not simply connected. Formalizing this idea leads to definitions such as the following, taken from Matt Visser's Lorentzian Wormholes.\n\n    If a Minkowski spacetime contains a compact region Ω, and if the topology of Ω is of the form Ω ~ R x Σ, where Σ is a three-manifold of the nontrivial topology, whose boundary has topology of the form ∂Σ ~ S2, and if, furthermore, the hypersurfaces Σ are all spacelike, then the region Ω contains a quasipermanent intra-universe wormhole.",
+    "lesson": "Astrophysics (from Greek astron, ἄστρον 'star', and physis, φύσις 'nature') is the branch of astronomy that deals with the physics of the universe, especially with 'the nature of the heavenly bodies, rather than their positions or motions in space'. Among the objects studied are galaxies, stars, extrasolar planets, the interstellar medium and the cosmic microwave background. Their emissions are examined across all parts of the electromagnetic spectrum, and the properties examined include luminosity, density, temperature, and chemical composition. Because astrophysics is a very broad subject, astrophysicists typically apply many disciplines of physics, including mechanics, electromagnetism, statistical mechanics, thermodynamics, quantum mechanics, relativity, nuclear and particle physics, and atomic and molecular physics.",
     "questions": [
       {
-        "question": "Question 1",
+        "question": "Astrophysics comes from greek astron, meaning 'universe'.",
+        "answer": false
+      },
+      {
+        "question": "Astrophysics deals with the physics of the universe.",
         "answer": true
       },
       {
-        "question": "Question 2",
+        "question": "The cosmic microwave background isn't among the objects studied in astrophysics.",
+        "answer": false
+      },
+      {
+        "question": "The chemical composition of the objects of the universe is among the properties examined in astrophysics.",
         "answer": true
       },
       {
-        "question": "Question 3",
-        "answer": true
-      },
-      {
-        "question": "Question 4",
-        "answer": true
-      },
-      {
-        "question": "Question 5",
+        "question": "Astrophysicists need to include elements of statistical mechanics in their study.",
         "answer": true
       }
     ]
