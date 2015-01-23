@@ -30,7 +30,7 @@ public class IA extends Player implements NPC{
 	
 	public Command generateValidGoCommand()
 	{		
-		return new Command("go", currentRoom.getRandomDirection());
+		return new Command("go", currentRoom.getRandomExitDirection());
 	}
 	
 	public Command generateDoCommand()

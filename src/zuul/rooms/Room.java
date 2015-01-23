@@ -1,6 +1,7 @@
 package zuul.rooms;
 
 import zuul.Game;
+import zuul.RandomGenerator;
 import zuul.Woz;
 import zuul.entities.NPC;
 import zuul.entities.Player;
@@ -36,6 +37,8 @@ public class Room {
 	private ArrayList<Item> usableItems;
 	protected ArrayList<String> actions;
 	protected ArrayList<Player> playersInRoom;
+	
+	protected Point coordinates;
 
 	/**
 	 * Create a rooms described "description". Initially, it has no exits.
@@ -51,6 +54,12 @@ public class Room {
 		this.usableItems = new ArrayList<>(100);
 		this.actions = new ArrayList<>(100);
 		this.playersInRoom = new ArrayList<Player>();
+		coordinates = null;
+	}
+	
+	public int getNbExits()
+	{
+		return exits.size();
 	}
 
 	/**
@@ -63,7 +72,7 @@ public class Room {
 	 */
 	public void setExit(Exits direction, Room neighbor) {
 		exits.put(direction, neighbor);
-		neighbor.putExit(direction.getOpposite(), this);
+		neighbor.putExit(direction, this);
 	}
 
 	public void putExit(Exits exit, Room room) {
@@ -72,8 +81,9 @@ public class Room {
 	
 	public String getRandomExitDirection()
 	{
-		Set<Exits> exitList = exits.keySet(); 
-		return ((Exits)(exitList.toArray())[new Random().nextInt(exitList.size())]).getValue();
+		ArrayList<Exits> disp = new ArrayList<Exits>();
+		disp.addAll(exits.keySet());
+		return disp.get(RandomGenerator.nextInt(disp.size())).getValue();
 	}
 
 	/**
@@ -161,17 +171,7 @@ public class Room {
 	public Room getExit(String direction) {
 		// return exits.get(direction);
 		return exits.get(Exits.getAnExit(direction));
-	}
-	
-	
-	public String getRandomDirection()
-	{
-		ArrayList<Exits> disp = new ArrayList<Exits>();
-		disp.addAll(exits.keySet());
-		
-		return disp.get(new Random().nextInt(disp.size())).getValue();
-	}
-	
+	}	
 	
 	/**
 	 * Return the list of all items present in the current room
@@ -372,6 +372,23 @@ public class Room {
 
 	public int getLevel() {
 		return this.level;
+	}
+	
+	public Point getCoordinates() {
+		return this.coordinates;
+	}
+	
+	public void setCoordinates(int x, int y) {
+		this.coordinates = new Point(x,y);
+	}
+	
+	public void setCoordinates(Point coordinates) {
+		this.coordinates = coordinates;
+	}
+
+	public void setCoordinates(double x, double y) {
+		this.coordinates = new Point();
+		coordinates.setLocation(x,y);
 	}
 
 }

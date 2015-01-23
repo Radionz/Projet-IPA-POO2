@@ -45,19 +45,25 @@ public class Woz {
 	
     public static void main(String[] args){
     	
-    	
+    	RandomGenerator.init();
     	
     	GameManager gm = new GameManager();    	
     	Game game = new Game(gm);
     	
-    	name = getPlayerName();
+    	game.generateCoordinatesMap();
     	
-    	w = new Window(game);    	
-    	w.setVisible(true);
+    	System.out.println("End of map generation");
     	
     	
-		game.play();
-		
-		w.dispose();
+    	
+    	//name = getPlayerName();
+//    	
+//    	w = new Window(game);    	
+//    	w.setVisible(true);
+//    	
+//    	
+//		game.play();
+//		
+//		w.dispose();
 	}
 }

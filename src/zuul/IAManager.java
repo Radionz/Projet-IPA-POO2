@@ -1,12 +1,11 @@
-package zuul.entities;
+package zuul;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Random;
 
-import zuul.Game;
-import zuul.GameManager;
+import zuul.entities.IA;
 import zuul.io.Command;
 import zuul.rooms.Room;
 
@@ -97,7 +96,7 @@ public class IAManager implements Runnable{
 		Command go = ia.generateValidGoCommand();
 		
 		ArrayList<Command> possibleCmd = new ArrayList<Command>();
-		
+
 		if(learn != null)
 			possibleCmd.add(learn);
 		
@@ -110,7 +109,7 @@ public class IAManager implements Runnable{
 		if(go != null)
 			possibleCmd.add(go);		
 			
-		return 	possibleCmd.get(new Random().nextInt(possibleCmd.size()));
+		return 	possibleCmd.get(RandomGenerator.nextInt(possibleCmd.size()));
 	}
 	
 	

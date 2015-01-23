@@ -1,5 +1,6 @@
 package zuul;
 
+import zuul.rooms.Point;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -8,7 +9,6 @@ import java.util.Random;
 
 import zuul.GameManager.CommandToProcess;
 import zuul.entities.IA;
-import zuul.entities.IAManager;
 import zuul.entities.Player;
 import zuul.entities.items.Coffee;
 import zuul.entities.items.Item;
@@ -202,6 +202,85 @@ public class Game {
 	private void printWelcome() {
 		Woz.writeMsg(this.player.getName() + ", "
 				+ (String) constantes.get("intro"));
+	}
+	
+	public void generateCoordinatesMap() {
+		Room startingRoom = rooms.get(0);
+		startingRoom.setCoordinates(new Point(0,0));
+		generateCoordinates(startingRoom,"",new Point(0,0));
+	}
+	
+	/**
+	 * A recursive method that set coordinates for a room and all it's neighbours.
+	 * @param room The room to add coordinates to
+	 * @param fromWhere The cardinal orientation from which we came from
+	 * @param previousLocation	The previous room's coordinate
+	 * @param count	The count of the rooms who's coodinates have been set..
+	 * @author ANASTAS Mazen
+	 */
+	private void generateCoordinates(Room room, String fromWhere,Point previousLocation) {
+		Point coordinates, differential;
+		int abscissa, ordinate;
+				
+		//If coordinates don't exist, create them
+		coordinates = previousLocation;
+		if (room.getCoordinates() == null) {
+			differential = getDifferential(fromWhere);
+			
+			abscissa = (int) coordinates.getX() + (int) differential.getX();
+			ordinate = (int) coordinates.getY() + (int) differential.getY();
+			coordinates = new Point(abscissa, ordinate);
+			
+			room.setCoordinates(coordinates);
+			System.out.println(room + " >>>> OK");
+		}
+		
+		//if only one exit, it's the same exit from which we came from
+		if (room.getNbExits()==1)	return;
+		
+		
+		//generate coordinates for neighbors rooms
+		for (String cardinal : cardinals()) {
+			//that's where we came from. So no need to check
+			if (areComplement(cardinal,fromWhere))	continue;	
+							
+			Room next = room.getExit(cardinal); 
+			if (next == null || next.getCoordinates() != null) continue;		//if room doesn't exist, skip 1 iteration.s
+			generateCoordinates(room.getExit(cardinal),cardinal,coordinates);	//recursively check neigbour
+		}
+	}
+
+	private static boolean areComplement(String cardinal, String complement) {
+		switch (cardinal) {
+			case "north" : return (complement.equals("south"));
+			case "south" : return (complement.equals("north"));
+			case "west" : return (complement.equals("east"));
+			case "east" : return (complement.equals("west"));
+			default : return false;
+		}
+	}
+	
+	public static String[] cardinals() {
+		return new String[]{"north","east","south","west"};
+	}
+	
+	
+	/**
+	 * Returns the (x,y) pair that represents the differential
+	 * based on the cardinal. The returned points' x will represent
+	 * the differential judging the x axis (respectively y). 
+	 * @param cardinal String representing the cardinal
+	 * @return point differential
+	 * @author ANASTAS Mazen
+	 */
+	private static Point getDifferential(String cardinal) {
+		switch (cardinal) {
+			case "north" : return new Point(0,1);
+			case "south" : return new Point(0,-1);
+			case "east" : return new Point(1,0);
+			case "west" : return new Point(-1,0);
+			default : return new Point(0,0);		//shouldn't ever need to get here.
+		}
 	}
 
 }
