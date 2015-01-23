@@ -55,7 +55,7 @@ public class GameManager implements Actions{
 	}
 
 	public boolean addCommandToProcess(Player p, Command c) {
-		boolean quit = true;
+		boolean quit = true;		
 		if(c.getCommandWord().equals("quit"))
 		{
 			quit = true;
@@ -144,8 +144,7 @@ public class GameManager implements Actions{
 			return false;
 		}
 
-		Room nextRoom = p.getCurrentRoom().getExit(command);
-		
+		Room nextRoom = p.getCurrentRoom().getExit(command);	
 
 		
 		if (nextRoom == null) {

@@ -15,13 +15,15 @@ import java.util.Random;
  */
 public class Player {
 
-	private final String name;
-	private ArrayList<Item> inventory;
-	private ArrayList<LessonPaper> knowledges;
-	private ArrayList<LabPaper> abilities;
-	private ArrayList<ExamPaper> examsPassed;
-	private Badge badge;
-	private Room currentRoom;
+	protected final String name;
+	protected ArrayList<Item> inventory;
+	protected ArrayList<LessonPaper> knowledges;
+	protected ArrayList<LabPaper> abilities;
+	protected ArrayList<ExamPaper> examsPassed;
+	protected Badge badge;
+	protected Room currentRoom;
+	
+	protected boolean studying;
 
 	public String getName() {
 		return name;
@@ -32,10 +34,14 @@ public class Player {
 		this.badge = new Badge();
 		this.inventory = new ArrayList<Item>();
 		this.currentRoom = room;
+		this.studying = false;
 		knowledges = new ArrayList<LessonPaper>();
 		abilities = new ArrayList<LabPaper>();
 		examsPassed = new ArrayList<ExamPaper>();
 	}
+	
+	public boolean isStudying(){ return studying; }
+	public void setStudying(boolean state) { studying = state; }
 
 	public boolean addItem(Item item) {
 		if (!inventory.contains(item)) {
@@ -116,7 +122,7 @@ public class Player {
 		return false;
 	}
 
-	private void removeExamPaper(int aRetirer) {
+	protected void removeExamPaper(int aRetirer) {
 		for (ExamPaper exam : examsPassed) {
 			if (exam.getId() == aRetirer)
 				examsPassed.remove(aRetirer);
@@ -124,7 +130,7 @@ public class Player {
 
 	}
 
-	private void removeLabPaper(int aRetirer) {
+	protected void removeLabPaper(int aRetirer) {
 		for (LabPaper lab : abilities) {
 			if (lab.getId() == aRetirer)
 				abilities.remove(aRetirer);
@@ -132,7 +138,7 @@ public class Player {
 
 	}
 
-	private void removeLessonPaper(int aRetirer) {
+	protected void removeLessonPaper(int aRetirer) {
 		for (LessonPaper lesson : knowledges) {
 			if (lesson.getId() == aRetirer)
 				knowledges.remove(aRetirer);

@@ -12,6 +12,7 @@ import javax.swing.plaf.SliderUI;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import zuul.Woz;
 import zuul.io.IO;
 
 public class Lesson {
@@ -104,9 +105,9 @@ public class Lesson {
 	}
 
 	public void printLesson() {
-		System.out.println("--- " + course + " ---");
+		Woz.writeMsg("--- " + course + " ---");
 		for (String sentence : sentences) {
-			System.out.println(sentence);
+			Woz.writeMsg(sentence);
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {

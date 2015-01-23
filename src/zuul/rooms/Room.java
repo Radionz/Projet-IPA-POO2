@@ -63,7 +63,7 @@ public class Room {
 	 */
 	public void setExit(Exits direction, Room neighbor) {
 		exits.put(direction, neighbor);
-		neighbor.putExit(direction, this);
+		neighbor.putExit(direction.getOpposite(), this);
 	}
 
 	public void putExit(Exits exit, Room room) {
@@ -168,7 +168,8 @@ public class Room {
 	{
 		ArrayList<Exits> disp = new ArrayList<Exits>();
 		disp.addAll(exits.keySet());
-		return disp.get(new Random().nextInt(disp.size())).getValue();		
+		
+		return disp.get(new Random().nextInt(disp.size())).getValue();
 	}
 	
 	
@@ -355,7 +356,7 @@ public class Room {
 
 		public static Exits getAnExit(String value) {
 			for (Exits e : values()) {
-				if (e.getValue().equals(value)) {
+				if (e.getValue().equals(value)) {			
 					return e;
 				}
 			}

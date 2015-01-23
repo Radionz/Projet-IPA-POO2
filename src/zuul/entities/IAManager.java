@@ -23,6 +23,8 @@ public class IAManager implements Runnable{
 	private ArrayList<Room> rooms;	
 	private GameManager manager;
 	
+	public static final int IA_SLEEP_TIME = 100;
+	
 	private Game game;
 	
 	public IAManager(GameManager gm, ArrayList<Room> rooms)
@@ -31,9 +33,12 @@ public class IAManager implements Runnable{
 		this.rooms 		= rooms;
 		this.listIA 	= new ArrayList<IA>();
 		
-		//addIA(new IA("Dorian le violent"));
-		addIA(new IA("Toto"));
-		//addIA(new IA("Jean Gui"));
+		
+		addIA(new IA("Sara"));
+//		addIA(new IA("Dorian le violent"));
+//		addIA(new IA("Toto"));
+//		addIA(new IA("Jean Gui"));
+//		addIA(new IA("Michelle"));
 	}
 	
 	public void addIA(IA npc){ listIA.add(npc); }
@@ -86,26 +91,33 @@ public class IAManager implements Runnable{
 	{
 		Room currentRoom = ia.getCurrentRoom();
 		boolean canDo = currentRoom.canUseDoCommand();
-		//boolean canAnwser = currentRoom.canUseAnswerCommand();
+		boolean canAnswer = currentRoom.canUseAnswerCommand();
+		Command learn = ia.learn();
+		Command act = ia.generateDoCommand();
+		Command go = ia.generateValidGoCommand();
 		
-		if((canDo && Math.random() < 0.5))
-			return generateDoCommand(ia);
+		ArrayList<Command> possibleCmd = new ArrayList<Command>();
 		
-		return generateValidGoCommand(ia);		
+		if(learn != null)
+			possibleCmd.add(learn);
+		
+		if(canAnswer)
+			possibleCmd.add(ia.getAnswerCommand());
+		
+		if(act != null)
+			possibleCmd.add(act);
+		
+		if(go != null)
+			possibleCmd.add(go);		
+			
+		return 	possibleCmd.get(new Random().nextInt(possibleCmd.size()));
 	}
 	
-	public Command generateDoCommand(IA ia)
-	{
-		ArrayList<String> actions = ia.getCurrentRoom().getActions();
-		String action = actions.get(new Random().nextInt(actions.size()));
-		
-		return new Command("action", action);
-	}
 	
-	public Command generateValidGoCommand(IA ia)
-	{		
-		return new Command("go", ia.getCurrentRoom().getRandomDirection());
-	}
+	
+	
+	
+	
 	
 	public boolean runIA()
 	{		
@@ -115,7 +127,7 @@ public class IAManager implements Runnable{
 			if(!manager.addCommandToProcess(ia, toProcess.get(ia)))
 				return false;
 			
-			try {	Thread.sleep(1000);	
+			try {	Thread.sleep(IA_SLEEP_TIME);	
 			} catch (InterruptedException e) {	
 				e.printStackTrace();	
 			}

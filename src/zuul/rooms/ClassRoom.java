@@ -4,6 +4,7 @@ package zuul.rooms;
 import java.util.ArrayList;
 
 import zuul.Game;
+import zuul.Woz;
 import zuul.entities.NPC;
 import zuul.entities.Player;
 import zuul.entities.items.LessonPaper;
@@ -38,9 +39,9 @@ public class ClassRoom extends Room {
 			actions.add("learn");
 		}
 		lesson = Game.getRadomLesson();
-		System.out.println(getLongDescription());
+		Woz.writeMsg(getLongDescription());
 		if (lesson.isPoo()) {
-			System.out.println("Lesson of POO, you must listen to this lesson !");
+			Woz.writeMsg("Lesson of POO, you must listen to this lesson !");
 			learn(player);
 		}
 	}
@@ -57,9 +58,11 @@ public class ClassRoom extends Room {
 			actions.remove("learn");
 			if(!(player instanceof NPC))
 				lesson.printLesson();
+			else
+				System.out.println("IA: " + player.getName() + " is Studying");
 			return player.addLesson(new LessonPaper(lesson, 0));
 		}
-		System.out.println("This lesson is complete, you can exit the room.");
+		Woz.writeMsg("This lesson is complete, you can exit the room.");
 		return false;
 	}
 }
