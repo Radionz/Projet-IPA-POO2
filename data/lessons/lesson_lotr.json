@@ -1,0 +1,28 @@
+{
+	"id": 8,
+    "course": "Lord of the Rings: Aragorn's claim",
+    "lesson": "In 3019 of the Third Age, Aragorn son of Arathorn claimed the throne of Gondor as Isildur's heir, Elendil's first born son, and became High King over both of the Numenorian realms in exile. The legitimacy of this claim however had previously been historically questionable. Thousands of years prior, after King Ondoher of Gondor died without a male heir, Arvedui of Arnor (Aragorn's ancestor) made a claim to the throne as both Isildur's heir and the husband of King Ondoher's only daughter, Firiel. The Council of Gondor, lead by Steward Pelendur, refused him on both front: Gondor's throne, according to Gondor's historians, belongs only to members of the direct line of Anarion, and in both Arnor and Gondor the throne is passed down the male line only - Arvedui couldn't rule as Firiel's husband.",
+
+    "questions": [
+      {
+        "question": "Arathorn made a claim to Gondor's throne after the death of King Arvedui.",
+        "answer": false
+      },
+      {
+        "question": "Firiel is Ondoher's daughter.",
+        "answer": true
+      },
+      {
+        "question": "There was no doubt over the legitimacy of Isildur's heirs' claim to the throne in Gondor.",
+        "answer": false
+      },
+      {
+        "question": "Firiel's claim to the throne of Gondor was refused.",
+        "answer": false
+      },
+      {
+        "question": "Aragorn claimed the throne off Gondor in 3019.",
+        "answer": true
+      }
+    ]
+  }

@@ -1,0 +1,28 @@
+{
+	"id": 9,
+    "course": "Harry Potter: The Marauder's Map",
+    "lesson": "The Marauder's Map is a magical document that reveals all of Hogwarts School of Witchcraft and Wizardry. Not only does it show every classroom, every hallway, and every corner of the castle, but it also shows every inch of the grounds, as well as all the secret passages that are hidden within its walls and the location of every person in the grounds, portrayed by a dot. It is also capable of accurately identifying each person, and is not fooled by animagi, polyjuice potions, or invisibility cloaks; even the Hogwarts ghosts are not exempt from this. One of the map's possible flaws lies in the fact that it cannot differentiate people who bear similar names (the shared names are not given a Junior or Senior at the end). Also, it does not seem to show unplottable rooms, since it was Dobby and not the map that showed where the Room of Requirement was or even existed. The Chamber of Secrets never appeared on the map; this could be because the creators never knew of it, or it could be unplottable as well, since when Ron and Hermione were in it collecting basilisk fangs, they did not appear on the map, like people did not appear when in the Room of Requirement.",
+
+    "questions": [
+      {
+        "question": "The Marauder's Map is a magical document that reveals the secrect rooms of any magical building.",
+        "answer": false
+      },
+      {
+        "question": "The Marauder's Map is capable of accurately identifying each person, and can only be fooled by animagi or invisibility cloaks.",
+        "answer": false
+      },
+      {
+        "question": "The Marauder's Map's can even differentiate people who bear similar names.",
+        "answer": false
+      },
+      {
+        "question": "The Chamber of Secrets never appeared on the Marauder's Map.",
+        "answer": true
+      },
+      {
+        "question": "The Marauder's Map does not seem to show unplottable rooms like the Room of Requirement.",
+        "answer": true
+      }
+    ]
+  }

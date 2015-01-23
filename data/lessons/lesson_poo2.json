@@ -1,26 +1,26 @@
 {
-	"id": 6,
+	"id": 5,
     "course": "POO",
     "lesson": "Today let me introduce you inheritance. You can declare a class B which inherit another class A. you write it this way 'A a= new B()'. But this 'B = new A()' is wrong. You have to add the instruction 'super();' in the constructor of B for the code to compile.  This is it for this POO lesson, see you for another one.",
     "questions": [
       {
-        "question": "Question 1",
+        "question": "If I declare a class A and B which extends A can I do 'A = new B();' ?",
         "answer": true
       },
       {
-        "question": "Question 2",
+        "question": "If I declare a class A and B which extends A can I do 'B = new A();' ?",
+        "answer": false
+      },
+      {
+        "question": "If a class B extends a class A can this constructor be right \nB(){\n super(); \n} ?",
         "answer": true
       },
       {
-        "question": "Question 3",
-        "answer": true
+        "question": "You can't declare a class B which inherit another class A",
+        "answer": false
       },
       {
-        "question": "Question 4",
-        "answer": true
-      },
-      {
-        "question": "Question 5",
+        "question": "You have to add the instruction 'super();' in the constructor of B for the code to compile.",
         "answer": true
       }
     ]

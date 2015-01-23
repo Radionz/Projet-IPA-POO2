@@ -1,26 +1,26 @@
 {
-	"id": 5,
+	"id": 6,
     "course": "POO",
     "lesson": "Today we will learn about Java syntax. If you write 'private' the field won't be accessible out of the class. If you declare a variable of a certain type, you can't affect it another type. Don't forget to add ';' at the end of every line of code. This is it for this POO lesson, see you for another one.",
     "questions": [
       {
-        "question": "Question 1",
-        "answer": true
+        "question": "Can 'private String name;' be access out of the class ?",
+        "answer": false
       },
       {
-        "question": "Question 2",
-        "answer": true
+        "question": "If I declare 'private String a;' can I do 'a = 3' ?",
+        "answer": false
       },
       {
-        "question": "Question 3",
-        "answer": true
+        "question": "Does it compile :\n private String s\nprivate String b; ?",
+        "answer": false
       },
       {
-        "question": "Question 4",
-        "answer": true
+        "question": "';' isn't necessary at the end of every line of code. T or F?",
+        "answer": false
       },
       {
-        "question": "Question 5",
+        "question": "If you write 'private' the field won't be accessible out of the class. T or F?",
         "answer": true
       }
     ]
